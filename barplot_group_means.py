@@ -18,6 +18,8 @@ def barplot_group_means(
 
     """Bar plot of group means
 
+    TODO: edit this, make the way it deals with groups more similar to line plot
+
     @type x: list of int
     @param x: x coord for bar corresponding to each group
 
