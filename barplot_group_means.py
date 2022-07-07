@@ -12,7 +12,8 @@ def barplot_group_means(
     colors="blue",
     w=0.8,
     size=(6,6),
-    ylbl="Freezing (%)"
+    ylbl="Freezing (%)",
+    show=False
 ):
 
     """Bar plot of group means
@@ -43,6 +44,11 @@ def barplot_group_means(
 
     @type ylbl: str
     @param ylbl: Label for y-axis of plot
+
+    @type show: bool
+    @param show: If true, displays plot output
+
+    @returns: fig, ax (see matplotlib)
     """
 
     # Graph
@@ -91,4 +97,7 @@ def barplot_group_means(
             fs=16
         )
 
-    plt.show(fig)
+    if show:
+        plt.show(fig)
+
+    return fig, ax
