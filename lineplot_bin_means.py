@@ -12,7 +12,9 @@ def lineplot_bin_means(
     legend=True,
     session_name=None,
     show_sig=True,
-    size=(6,6),
+    title_size=24,
+    font_size=16,
+    size=("scale",6),
     ylbl="% Freezing",
 ):
 
@@ -28,8 +30,23 @@ def lineplot_bin_means(
     group_mean_by_bin = [group_df.mean() for group_df in data]
     group_error_by_bin = [group_df.sem() for group_df in data] 
 
+    # Set Default Font Sizes
+    plt.rc('font', size=font_size)
+    plt.rc(
+        'axes',
+        titlesize=title_size,
+        labelsize=font_size
+    )
+    # plt.rc('xtick', labelsize=font_size)
+    # plt.rc('ytick', labelsize=font_size)
+
     # Plot
-    fig, ax = plt.subplots(figsize=size)
+    if size[0].isnumeric():
+        fig, ax = plt.subplots(figsize=size)
+    elif size[0].lower() == "scale":
+        height = size[1]
+        width = 0.5 + 0.6*len(df_binned.columns) # fig is 4:3 for 10 bins
+        fig,ax = plt.subplots(figsize=(width,height))
 
     # plot errorbar for each group, on same Axes
     for grp_i in range(0,len(group_mean_by_bin)):
@@ -39,9 +56,14 @@ def lineplot_bin_means(
             yerr=group_error_by_bin[grp_i],
             label=group_labels[grp_i],
             color=group_colors[grp_i],
-            marker=".", markersize=12,
-            capsize=4,
+            marker=".", markersize=font_size,
+            capsize=8,
+            elinewidth=2,
+            capthick=2,
         )
+
+    if len(group_mean_by_bin[0].index)==2:
+        ax.set(xlim=[0.5, 2.5])
 
     ax.set(
         title=session_name,
@@ -50,7 +72,8 @@ def lineplot_bin_means(
         ylabel= ylbl,
     )
 
-    p_vals = stats.ttest_ind(data[0],data[1])[1]
+
+    p_vals = stats.ttest_ind(data[0],data[1], nan_policy="omit")[1]
 
     if show_sig:
         for i in range(0,len(p_vals)):
@@ -97,7 +120,7 @@ def lineplot_bin_means(
     if legend:
         ax.legend()
 
-    return fig, ax
+    return fig, ax, p_vals
 
 
 def make_bins(df):
