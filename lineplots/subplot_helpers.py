@@ -274,14 +274,14 @@ def _label_significance(
     """
     Given an Axes and p-values, adds text/stars labelling significance to the Axes.
     """
-    for i in range(0,len(p_vals)):
-        p = p_vals[i]
-
-        bin = group_mean_by_bin[0].index[i]
+    for i, p in enumerate(p_vals):
+        bin = group_mean_by_bin[0].index[i]  # get bin ID. necessary for BLs (bin != i)
 
         bin_group_means = [group[bin] for group in group_mean_by_bin]
+        
         max_group_mean = max(bin_group_means)
         max_group_id = bin_group_means.index(max_group_mean)
+        
         error_of_max = group_error_by_bin[max_group_id][bin]
             
         if p > 0.06:
@@ -294,7 +294,8 @@ def _label_significance(
     ax.text(
             x=bin,
             y=max_group_mean + error_of_max + 5,
-            s=bin_label
+            s=bin_label,
+            horizontalalignment="center"
         )
 
 

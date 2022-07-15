@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 import matplotlib.pyplot as plt
 
 from subplot_helpers import *
@@ -26,16 +27,23 @@ groups = [ee1_vns, ee1_sham]
 # ee2_sham = [2,4,5,7,10]
 # ee2_exclude = [6] # cuff problems
 
-to_plot = ["1afc", "2cfrt", "3ext1", "4ext2"] 
-fig_filename = "ROW1"
+# to_plot = ["1afc", "2cfrt", "3ext1", "4ext2"] 
+# fig_filename = "ROW1"
 
+to_plot = ["5ret","6sr1","7sr2","8ren","9rst"]
+fig_filename = "ROW2"
+
+rel_widths = [1,1,1,1,1]
+rows = 1
+cols = 5
+size = (17,6)
  
 fig, axes = plt.subplots(
-    nrows=1,
-    ncols=4,
-    figsize=(17,6),
+    nrows=rows,
+    ncols=cols,
+    figsize=size,
     sharey=True,
-    gridspec_kw={'width_ratios':[2,1,4,4]}
+    gridspec_kw={'width_ratios':rel_widths}
 )
 
 p_vals = []
@@ -45,12 +53,8 @@ for i, ax in enumerate(axes):
 
     session_df = get_df(cohort, s, scorer, data_folder)
 
-    if i==0:
-        y_label = "% Freezing"
-        show_legend = True
-    else:
-        y_label = None
-        show_legend = False
+    y_label = "% Freezing" if i==0 else None
+    show_legend = (i==0) and fig_filename=="ROW1" #TODO make this less sus
 
     session_p_vals = lineplot_bin_means(
         ax,
