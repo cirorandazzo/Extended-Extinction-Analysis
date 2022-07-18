@@ -21,6 +21,7 @@ def lineplot_bin_means(
     title_size=24,
     font_size=16,
     y_label="% Freezing",
+    bg_color=None,
 ):
 
     """
@@ -53,10 +54,12 @@ def lineplot_bin_means(
         group_labels,
         group_colors,
         font_size,
+        title_size,
         show_sig,
         show_legend,
         y_label,
         data,
+        bg_color
     )
 
     return p_vals
@@ -193,10 +196,12 @@ def _make_axes(
     group_labels,
     group_colors,
     font_size,
+    title_size,
     show_sig,
     show_legend,
     y_label,
     data,
+    bg_color,
 ):
     """
     Given an Axes and a session, plot errorbar for each group in that session. Returns numpy array containing p-values between groups for each bin in this session.
@@ -225,12 +230,16 @@ def _make_axes(
         xticks=list(group_mean_by_bin[0].index),  #[i for i in range(1,len(group_mean_by_bin[0])+1)],
         ylim=[0,100],
         ylabel= y_label,
+        
     )
+
+    if bg_color is not None:
+        ax.set_facecolor(color=bg_color)
 
     p_vals = stats.ttest_ind(data[0],data[1], nan_policy="omit")[1]
 
     if show_sig:
-        _label_significance(ax, group_mean_by_bin, group_error_by_bin, p_vals)
+        _label_significance(ax, group_mean_by_bin, group_error_by_bin, p_vals, title_size)
         
     _add_x_labels(ax, trials=group_mean_by_bin[0].index)
 
@@ -269,7 +278,8 @@ def _label_significance(
     ax,
     group_mean_by_bin,
     group_error_by_bin,
-    p_vals
+    p_vals,
+    font_size=None,
 ):
     """
     Given an Axes and p-values, adds text/stars labelling significance to the Axes.
@@ -295,7 +305,8 @@ def _label_significance(
             x=bin,
             y=max_group_mean + error_of_max + 5,
             s=bin_label,
-            horizontalalignment="center"
+            horizontalalignment="center",
+            fontsize=font_size,
         )
 
 
