@@ -105,6 +105,7 @@ def save_fig(
     scorer,
     sessions_plotted,
     p_vals,
+    existing_subfolder=None,
     log_filename = "log.txt",
 ):
     """
@@ -112,32 +113,55 @@ def save_fig(
 
     """
 
-    date = get_date_string()
+    if existing_subfolder is not None:
+        fig_subfolder = existing_subfolder
+    else:
+        # Make new subfolder
+        fig_subfolder = _make_fig_subfolder(fig_folder)
 
+    log_filename = os.path.join(fig_subfolder, log_filename)
+    
+    # Make new log file if necessary
+    if not os.path.exists(log_filename):
+        with open(log_filename,'a') as f:
+            f.write(project.upper() + " ANALYSIS" + "\n")
+            f.write("Cohort: " + cohort + "\n")
+            f.write("Scorer: " + scorer + "\n\n")
+        
+
+    # Save figure
+    fig_file = os.path.join(fig_subfolder, fig_filename)
+    plt.savefig(
+        fig_file+".png",
+        bbox_inches="tight",
+    )
+
+    # Write p-vals to log
+    _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename)
+
+    return fig_subfolder
+
+
+
+
+#--- LOCAL HELPERS ---#
+
+def _make_fig_subfolder(fig_folder):
+    date = get_date_string()
     i=0
     while True:
         try:
             fig_subfolder = os.path.join(fig_folder, date, str(i))
             os.makedirs(fig_subfolder)
 
-            log_filename = os.path.join(fig_subfolder, log_filename)
-            with open(log_filename,'a') as f:
-                f.write(project.upper() + " ANALYSIS" + "\n")
-                f.write("Cohort: " + cohort + "\n")
-                f.write("Scorer: " + scorer + "\n\n")
-
             break
         except FileExistsError:
             i+=1
-    
-    fig_file = os.path.join(fig_subfolder, fig_filename)
-    
-    plt.savefig(
-        fig_file+".png",
-        bbox_inches="tight",
-    )
+    return fig_subfolder
 
+def _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename):
     with open(log_filename,'a') as f:
+        f.write("\nFigure:" + fig_filename + "\n")
         for s_i, s_name in enumerate(sessions_plotted):
             f.write("---" + s_name + "---\n")
             session_p_vals = p_vals[s_i]
@@ -147,9 +171,6 @@ def save_fig(
                     f.write("*")
                 f.write(str(i+1) + ": " + str(p) + "\n")
             f.write("\n")
-
-
-#--- LOCAL HELPERS ---#
 
 def _make_bins(df):
     '''
