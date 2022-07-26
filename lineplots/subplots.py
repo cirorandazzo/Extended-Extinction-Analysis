@@ -55,9 +55,10 @@ def figure_details(fig_filename):
 
     return to_plot, rel_widths, rows, cols, size, subplot_spacing
 
-# TODO: make subplot function
 # TODO: add arrows?
 #   https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.ConnectionPatch.html?highlight=connectionpatch#matplotlib.patches.ConnectionPatch
+# TODO: refactor lineplot_bin_means... it is probably redundant
+#   would likely be better to directly call the little functions somewhere.
 
 set_font_sizes(title_size, font_size)
 
@@ -102,7 +103,8 @@ for fig_index, fig_filename in enumerate(rows_to_plot):
                 title_size=title_size,
                 font_size=font_size,
                 y_label=y_label,
-                bg_color=bg_color
+                bg_color=bg_color,
+                subtitle=session_subtitles.get(s)
             )
         except KeyError:
             # Not a session with data! Graph as a callout

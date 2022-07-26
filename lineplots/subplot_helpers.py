@@ -22,6 +22,7 @@ def lineplot_bin_means(
     font_size=16,
     y_label="% Freezing",
     bg_color=None,
+    subtitle=None,
 ):
 
     """
@@ -55,6 +56,17 @@ def lineplot_bin_means(
         data,
         bg_color
     )
+
+    if subtitle is not None:
+        ax.text(
+            0.5, 0.95, subtitle,
+            fontsize=font_size,
+            color='black',
+            fontstyle='italic',
+            verticalalignment='center',
+            horizontalalignment='center',
+            transform=ax.transAxes,
+            )
 
     return p_vals
 

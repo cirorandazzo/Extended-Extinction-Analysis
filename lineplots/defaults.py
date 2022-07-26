@@ -11,8 +11,8 @@ session_names = {
     "3ext1"  : "Extinction Day 1",
     "4ext2"  : "Extinction Day 2",
     "5ret"   : "Retention",
-    "6sr1"   : "SR1",
-    "7sr2"   : "SR2",
+    "6sr1"   : "Short-Term SR",
+    "7sr2"   : "Long-Term SR",
     "8ren"   : "Renewal",
     "9rst"   : "Rst. Test"
 }
@@ -32,6 +32,14 @@ graph_backgrounds = {
     "7sr2"   : ctx_b,
     "8ren"   : ctx_c,
     "9rst"   : ctx_b,
+}
+
+session_subtitles = {
+    "5ret"   : "1d. post-extinction",
+    "6sr1"   : "15d. post-extinction",
+    "7sr2"   : "43d. post-extinction",
+    "8ren"   : "48d. post-extinction",
+    "9rst"   : "50d. post-extinction",
 }
 
 time_per_trial = 30  # seconds per trial
