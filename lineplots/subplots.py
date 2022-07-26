@@ -38,7 +38,7 @@ def figure_details(fig_filename):
     if fig_filename=="ROW1":
         to_plot = ["1afc","2cfrt","3ext1","4ext2"]
 
-        rel_widths = [2.5,1,4,4]
+        rel_widths = [2.5,1.5,4,4]
         rows = 1
         cols = 4
         size = (21,5)

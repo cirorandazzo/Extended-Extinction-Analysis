@@ -6,15 +6,15 @@ font_size = 16
 
 
 session_names = { 
-    "1afc"   : "Fear condititioning",
-    "2cfrt"  : "Fear recall",
-    "3ext1"  : "Extinction Day 1",
-    "4ext2"  : "Extinction Day 2",
-    "5ret"   : "Retention",
-    "6sr1"   : "Short-Term SR",
-    "7sr2"   : "Long-Term SR",
-    "8ren"   : "Renewal",
-    "9rst"   : "Rst. Test"
+    "1afc"   : "(a) Fear condititioning",
+    "2cfrt"  : "(b) Fear recall",
+    "3ext1"  : "(c) Extinction Day 1",
+    "4ext2"  : "(d) Extinction Day 2",
+    "5ret"   : "(e) Retention",
+    "6sr1"   : "(f) Short-Term SR",
+    "7sr2"   : "(g) Long-Term SR",
+    "8ren"   : "(h) Renewal",
+    "9rst"   : "(i) Rst. Test"
 }
 
 ctx_a = (0.9058,0.9019,0.9019)
