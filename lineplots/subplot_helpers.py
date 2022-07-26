@@ -36,14 +36,7 @@ def lineplot_bin_means(
     data = [df_binned.loc[group] for group in group_assignments]
     group_mean_by_bin = [group_df.mean() for group_df in data]
     group_error_by_bin = [group_df.sem() for group_df in data] 
-
-    # Set Default Font Sizes
-    plt.rc('font', size=font_size)
-    plt.rc(
-        'axes',
-        titlesize=title_size,
-        labelsize=font_size
-    )
+    group_sizes = [len(grp) for grp in data]
 
     # Plot
     p_vals = _make_axes(
@@ -51,6 +44,7 @@ def lineplot_bin_means(
         session_name,
         group_mean_by_bin,
         group_error_by_bin,
+        group_sizes,
         group_labels,
         group_colors,
         font_size,
@@ -71,6 +65,17 @@ def get_date_string(date_format="%Y-%m-%d"):
     """
     now = datetime.datetime.now()
     return now.strftime(date_format)
+
+
+def set_font_sizes(title_size, font_size):
+    font = {'size'      : font_size}
+    
+    axes = {'titlesize' : title_size,
+            'labelsize' : font_size}
+
+    plt.rc('font', **font)
+    plt.rc('axes', **axes)
+
 
 
 def get_df(
@@ -159,6 +164,7 @@ def _make_fig_subfolder(fig_folder):
             i+=1
     return fig_subfolder
 
+
 def _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename):
     with open(log_filename,'a') as f:
         f.write("\nFigure:" + fig_filename + "\n")
@@ -171,6 +177,7 @@ def _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename):
                     f.write("*")
                 f.write(str(i+1) + ": " + str(p) + "\n")
             f.write("\n")
+
 
 def _make_bins(df):
     '''
@@ -214,6 +221,7 @@ def _make_axes(
     session_name,
     group_mean_by_bin,
     group_error_by_bin,
+    group_sizes,
     group_labels,
     group_colors,
     font_size,
@@ -223,22 +231,25 @@ def _make_axes(
     y_label,
     data,
     bg_color,
+    line_width = 3
 ):
     """
     Given an Axes and a session, plot errorbar for each group in that session. Returns numpy array containing p-values between groups for each bin in this session.
     """
     # plot errorbar for each group, on same Axes
     for grp_i in range(0,len(group_mean_by_bin)):
+        
         ax.errorbar(
             x=group_mean_by_bin[grp_i].index,
             y=group_mean_by_bin[grp_i],
             yerr=group_error_by_bin[grp_i],
-            label=group_labels[grp_i],
+            label= group_labels[grp_i] + " (%(n)i)"%{'n':group_sizes[grp_i]},
             color=group_colors[grp_i],
             marker=".", markersize=font_size,
             capsize=8,
-            elinewidth=2,
-            capthick=2,
+            elinewidth=line_width,
+            capthick=line_width,
+            linewidth=line_width
         )
 
     # manually set xlim, otherwise some are squished
@@ -251,7 +262,6 @@ def _make_axes(
         xticks=list(group_mean_by_bin[0].index),  #[i for i in range(1,len(group_mean_by_bin[0])+1)],
         ylim=[0,100],
         ylabel= y_label,
-        
     )
 
     if bg_color is not None:

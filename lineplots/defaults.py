@@ -1,6 +1,10 @@
 group_colors = ["red", "blue"]
 group_labels = ["VNS", "SHAM"]
 
+title_size = 18
+font_size = 16
+
+
 session_names = { 
     "1afc"   : "Fear condititioning",
     "2cfrt"  : "Fear recall",
@@ -16,6 +20,7 @@ session_names = {
 ctx_a = (0.9058,0.9019,0.9019)
 ctx_b = (0.9843,0.9019,0.6392)
 ctx_c = (0.7921,0.8745,0.7215)
+ctx_rst = (0.5333,0.1294,0.0666)
 
 graph_backgrounds = {
     "1afc"   : ctx_a,
