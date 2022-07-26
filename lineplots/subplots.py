@@ -111,9 +111,10 @@ for fig_index, fig_filename in enumerate(rows_to_plot):
                 facecolor=ctx_rst,
                 xlim=(0,1),
                 ylim=(0,1),
-                xticks=[],
-                yticks=[],
             )
+
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
 
             ax.text(
                 0.5, 0.5, 'REINSTATEMENT',
