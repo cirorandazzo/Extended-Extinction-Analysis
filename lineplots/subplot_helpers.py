@@ -90,7 +90,7 @@ def set_font_sizes(title_size, font_size):
 
 
 
-def get_df(
+def get_df_from_csv(
     cohort,
     session_code,
     scorer,
@@ -112,6 +112,53 @@ def get_df(
     df = 100 * df / time_per_trial  # change into percents
 
     return df
+
+def get_df_from_xlsx(
+    cohort,
+    scorer,
+    data_folder='./data',
+    session_codes=None,
+    time_per_trial=30
+):
+    """
+    Reads dfs from XLSX file named {cohort}-{scorer}.xlsx (eg, ee1-cdr.xlsx)
+
+    parameters
+    - cohorts (string): group name of data file to read (eg, 'EE1')
+    - scorer (string): scorer initials of data file to read (eg, 'cdr')
+    - data_folder (string): string containing file path to data folder. default is '.data'
+    - session_codes: list of strings. names of sheets to read from this file, or None for all sheets (default).
+    - time per trial: maximum scoring length per trial. default=30, since each trial is scored out of 30 seconds.
+    
+    Also:
+    - Re-indexes df to cohort–animal ID (eg, 'EE1A1')
+    - Change seconds into percents
+    """
+    
+    file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
+    
+    df_dict = pd.read_excel(
+        file_path,
+        sheet_name=None, # all sheets
+        header=0, # first row header
+        index_col=0, # first column index
+    )
+
+    if isinstance(df_dict, pd.DataFrame):
+        # only 1 session, so pd.read_excel() returns a dataframe
+        return df_dict  
+    else:
+        # >1 session, pd.read_excel() returns dictionary of dataframes (sheet_name:pd.DataFrame)
+        all_sessions = df_dict.keys()
+        dfs = []
+
+        for session in all_sessions:
+            session_df = df_dict.get(session)
+            session_df.name = session
+            dfs.append(session_df)
+    
+        return dfs
+
 
 
 def save_fig(
