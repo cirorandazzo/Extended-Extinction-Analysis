@@ -13,4 +13,4 @@ Raw scoring sheets have been cleaned and organized into files by group and score
 
 ## Notes
 
-- Second scorer on `ee2-cdr_hp.xlsx` was CDR for some behavior sessions, HP for other sessions.
+- Second scorer on `ee2-cdr.xlsx` was CDR for some behavior sessions, HP for other sessions.
