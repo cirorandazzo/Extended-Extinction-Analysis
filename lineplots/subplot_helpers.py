@@ -34,7 +34,13 @@ def lineplot_bin_means(
     df_binned = _make_bins(df)
     
     # Separate into groups
-    data = [df_binned.loc[group] for group in group_assignments]
+    data = []
+    # [df_binned.loc[f'A{group}'] for group in group_assignments]
+
+    for group in group_assignments:
+        animal_ids = [f'A{i}' for i in group]  # appends "A" to animal numbers
+        data.append(df_binned.loc[animal_ids])
+
     group_mean_by_bin = [group_df.mean() for group_df in data]
     group_error_by_bin = [group_df.sem() for group_df in data] 
     group_sizes = [len(grp) for grp in data]
@@ -139,25 +145,28 @@ def get_df_from_xlsx(
     
     df_dict = pd.read_excel(
         file_path,
-        sheet_name=None, # all sheets
+        sheet_name=session_codes, # all sheets
         header=0, # first row header
         index_col=0, # first column index
     )
 
-    if isinstance(df_dict, pd.DataFrame):
-        # only 1 session, so pd.read_excel() returns a dataframe
-        return df_dict  
-    else:
-        # >1 session, pd.read_excel() returns dictionary of dataframes (sheet_name:pd.DataFrame)
-        all_sessions = df_dict.keys()
-        dfs = []
+    for session in df_dict:  # normalize to percent
+        df_dict[session] = df_dict[session]/time_per_trial*100
+    # if isinstance(df_dict, pd.DataFrame):
+    #     # only 1 session, so pd.read_excel() returns a dataframe
+    #     return df_dict  
+    # else:
+    #     # >1 session, pd.read_excel() returns dictionary of dataframes (sheet_name:pd.DataFrame)
+    #     all_sessions = df_dict.keys()
+    #     dfs = []
 
-        for session in all_sessions:
-            session_df = df_dict.get(session)
-            session_df.name = session
-            dfs.append(session_df)
+    #     for session in all_sessions:
+    #         session_df = df_dict.get(session)
+    #         session_df.name = session
+    #         dfs.append(session_df)
     
-        return dfs
+    #     return dfs
+    return df_dict
 
 
 
@@ -249,7 +258,7 @@ def _make_bins(df):
 
     df_binned = pd.DataFrame(index=df.index) # new df with same index
 
-    num_bl_trials = len([s for s in df.columns if "BL" in s.upper()])  # count number of baseline sessions in data
+    num_bl_trials = len([s for s in df.columns if "BL" in str(s).upper()])  # count number of baseline sessions in data
     num_bl_bins = int(num_bl_trials/2)
     num_nonbl_bins = int(df.shape[1] / 2) - num_bl_bins
 
@@ -265,8 +274,8 @@ def _make_bins(df):
 
     # binning non-BL sessions
     for i in range(0, num_nonbl_bins):
-        a = str((2*i)+1)
-        b = str((2*i)+2)
+        a = (2*i)+1
+        b = (2*i)+2
 
         trial = i+1
 

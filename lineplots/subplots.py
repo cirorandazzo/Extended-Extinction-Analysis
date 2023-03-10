@@ -2,41 +2,44 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+import matplotlib.image as img
 
 from subplot_helpers import *
 from defaults import *
 # from lineplot_bin_means import *
 
+#------ DATA INFO ------#
 data_folder = "./data"
 project = "Extended Extinction"
-cohort = "ee1"  #TODO implement all
-# sessions = "all" #TODO implement
-scorer = "mel"  #TODO implement all
+cohort = "EE1"
+scorer = "mk"
 
-fig_folder = "./figures"
-save_figs = True
-colored_backgrounds=True
-
+# Group Info
 ee1_vns = [2,3,6,7,9,11]
 ee1_sham = [1,4,5,8,10]
 ee1_exclude = []
 
-# TODO make one vns/sham group variable
-groups = [ee1_vns, ee1_sham]
+ee2_vns = [1,3,6,8,9,11,12]
+ee2_sham = [2,4,5,7,10]
+ee2_exclude = [6]
 
-# ee2_vns = [1,3,6,8,9]
-# ee2_sham = [2,4,5,7,10]
-# ee2_exclude = [6] # cuff problems
+#------ FIGURE INFO ------#
+fig_folder = "./figures"
+save_figs = True
+colored_backgrounds=True
+
+groups = [ee1_vns, ee1_sham]
 
 # to_plot = ["1afc", "2cfrt", "3ext1", "4ext2"] 
 # fig_filename = "ROW1"
 
-rows_to_plot = ["ROW1","ROW2"]
+rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
+
 
 # TODO: de-jank this?
 def figure_details(fig_filename):
     if fig_filename=="ROW1":
-        to_plot = ["1afc","2cfrt","3ext1","4ext2"]
+        to_plot = ['1-AFC', '2-CFRT', '3-EXT1', '4-EXT2']
 
         rel_widths = [2.5,1.5,4,4]
         rows = 1
@@ -45,7 +48,7 @@ def figure_details(fig_filename):
         subplot_spacing = 0.05
 
     elif fig_filename=="ROW2":
-        to_plot = ["5ret","6sr1","7sr2","8ren", "REINSTATEMENT","9rst"]
+        to_plot = ['5-RET', '6-SR1', '7-SR2', '8-REN', 'REINSTATEMENT', '9-RST']
 
         rel_widths = [1,1,1,1,0.25,1]
         rows = 1
@@ -57,10 +60,12 @@ def figure_details(fig_filename):
 
 # TODO: add arrows?
 #   https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.ConnectionPatch.html?highlight=connectionpatch#matplotlib.patches.ConnectionPatch
-# TODO: refactor lineplot_bin_means... it is probably redundant
-#   would likely be better to directly call the little functions somewhere.
+# TODO: refactor lineplot_bin_means, it is probably redundant.
+#   would likely be better to directly call the helper functions somewhere.
 
 set_font_sizes(title_size, font_size)
+
+shock = img.imread('./lineplots/lightning.png')
 
 for fig_index, fig_filename in enumerate(rows_to_plot):
     
@@ -77,20 +82,35 @@ for fig_index, fig_filename in enumerate(rows_to_plot):
     # plt.tick_params(axis="both",which="major",labelsize=font_size)
 
     p_vals = []
+    all_dfs = get_df_from_xlsx(cohort, scorer)
+
     for i, ax in enumerate(axes):
         s = to_plot[i]  # session code
-        try:
-            s_name = session_names[s]  # full session name from dict
 
-            session_df = get_df(cohort, s, scorer, data_folder)
+        try:
+            s_name = session_names[s.upper()]  # full session name from dict
+
+            session_df = all_dfs[s.upper()]
 
             y_label = "% Freezing" if i==0 else None
             show_legend = (i==0) and fig_filename=="ROW1" #TODO make this less sus
 
             if colored_backgrounds:
-                bg_color= graph_backgrounds.get(s)
+                bg_color= graph_backgrounds.get(s.upper())
             else:
                 bg_color=None
+
+            # if s == '1-AFC':  # TODO: bracket w/ lightning bolt for AFC
+            #     ax.annotate('',
+            #         xy = (2.5,-10),
+            #         # xy=(.75,4.25),
+            #         xytext=(2.5,-15),
+            #         xycoords='data',
+            #         ha='center',
+            #         va='bottom',
+            #         annotation_clip=False,
+            #         arrowprops=dict(arrowstyle='-[, widthB=5.0, lengthB=.75'),
+            #     )
 
             session_p_vals = lineplot_bin_means(
                 ax,
@@ -128,6 +148,8 @@ for fig_index, fig_filename in enumerate(rows_to_plot):
                 horizontalalignment='center',
                 transform=ax.transAxes,
                 )
+            
+            session_p_vals = []
 
         p_vals.append(session_p_vals)
 
