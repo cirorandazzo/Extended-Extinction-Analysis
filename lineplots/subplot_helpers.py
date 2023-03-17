@@ -179,12 +179,17 @@ def save_fig(
     sessions_plotted,
     p_vals,
     existing_subfolder=None,
-    log_filename = "log.txt",
+    log_filename = "LOG",
+    cohort_in_filenames = True,
 ):
     """
     TODO: document
 
     """
+
+    if cohort_in_filenames:
+        fig_filename = f"{cohort}_{scorer}-{fig_filename}"
+        log_filename = f"{cohort}_{scorer}-{log_filename}"
 
     if existing_subfolder is not None:
         fig_subfolder = existing_subfolder
@@ -192,6 +197,10 @@ def save_fig(
         # Make new subfolder
         fig_subfolder = _make_fig_subfolder(fig_folder)
 
+
+    if not log_filename.endswith('.txt'):
+        log_filename = f'{log_filename}.txt'
+        
     log_filename = os.path.join(fig_subfolder, log_filename)
     
     # Make new log file if necessary
@@ -205,7 +214,7 @@ def save_fig(
     # Save figure
     fig_file = os.path.join(fig_subfolder, fig_filename)
     plt.savefig(
-        fig_file+".png",
+        f"{fig_file}.png",
         bbox_inches="tight",
     )
 
@@ -233,17 +242,22 @@ def _make_fig_subfolder(fig_folder):
     return fig_subfolder
 
 
-def _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename):
+def _log_pvals(
+        fig_filename,
+        sessions_plotted,
+        p_vals, 
+        log_filename
+):
     with open(log_filename,'a') as f:
-        f.write("\nFigure:" + fig_filename + "\n")
+        f.write(f"\nFigure: {fig_filename} \n")
         for s_i, s_name in enumerate(sessions_plotted):
-            f.write("---" + s_name + "---\n")
+            f.write(f"---{s_name}---\n")
             session_p_vals = p_vals[s_i]
-            for i, p in enumerate(session_p_vals):
+            for bin_no, p in enumerate(session_p_vals):
                 p = np.around(p,5)
                 if p<=0.05:
                     f.write("*")
-                f.write(str(i+1) + ": " + str(p) + "\n")
+                f.write(f"{bin_no+1!s}: {p!s} \n")
             f.write("\n")
 
 
