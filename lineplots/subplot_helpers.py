@@ -38,7 +38,9 @@ def lineplot_bin_means(
     # [df_binned.loc[f'A{group}'] for group in group_assignments]
 
     for group in group_assignments:
-        animal_ids = [f'A{i}' for i in group]  # appends "A" to animal numbers
+        animal_ids = group
+        if 'A' not in group[0]:  # combined data already has prefixes
+            animal_ids = [f'A{i}' for i in group]  # appends "A" to animal numbers
         data.append(df_binned.loc[animal_ids])
 
     group_mean_by_bin = [group_df.mean() for group_df in data]
@@ -120,28 +122,24 @@ def get_df_from_csv(
     return df
 
 def get_df_from_xlsx(
-    cohort,
-    scorer,
-    data_folder='./data',
+    file_path,
+    cohort = "multiple",
     session_codes=None,
     time_per_trial=30
 ):
     """
-    Reads dfs from XLSX file named {cohort}-{scorer}.xlsx (eg, ee1-cdr.xlsx)
+    Reads dfs from XLSX file
 
     parameters
-    - cohorts (string): group name of data file to read (eg, 'EE1')
-    - scorer (string): scorer initials of data file to read (eg, 'cdr')
-    - data_folder (string): string containing file path to data folder. default is '.data'
+    - file_path: full file path to XLSX file to be read
+    - cohort: string containing groups.
     - session_codes: list of strings. names of sheets to read from this file, or None for all sheets (default).
     - time per trial: maximum scoring length per trial. default=30, since each trial is scored out of 30 seconds.
     
     Also:
-    - Re-indexes df to cohort–animal ID (eg, 'EE1A1')
+    - Re-indexes df to cohort-animal ID (eg, 'EE1A1')
     - Change seconds into percents
     """
-    
-    file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
     
     df_dict = pd.read_excel(
         file_path,
@@ -150,8 +148,14 @@ def get_df_from_xlsx(
         index_col=0, # first column index
     )
 
-    for session in df_dict:  # normalize to percent
-        df_dict[session] = df_dict[session]/time_per_trial*100
+    for session in df_dict: 
+        df_dict[session]
+        if cohort == "multiple" and df_dict[session].index.name == "Group": # concatenate group + animal ID 
+            new_index = (df_dict[session].index + df_dict[session]["Animal ID"]).values
+            df_dict[session].set_index(new_index, inplace=True)
+            df_dict[session].drop("Animal ID", axis=1, inplace=True)
+
+        df_dict[session] = df_dict[session]/time_per_trial*100 # normalize to percent
     # if isinstance(df_dict, pd.DataFrame):
     #     # only 1 session, so pd.read_excel() returns a dataframe
     #     return df_dict  

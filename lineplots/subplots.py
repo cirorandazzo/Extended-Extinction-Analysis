@@ -13,7 +13,8 @@ from defaults import *
 # Projec
 data_folder = "./data"
 project = "Extended Extinction"
-cohorts = ["EE1","EE2"]
+# cohorts = ["EE1","EE2"]
+cohorts = ["EE1_2"]  # combined EE1 + EE2 data
 scorer = "mk"
 
 # Group Info
@@ -25,12 +26,22 @@ ee2_vns = [1,3,6,8,9,11,12]
 ee2_sham = [2,4,5,7,10]
 ee2_exclude = [6]
 
+# combined group data includes cohort in animal ID. it aint pretty, but itll (probably) work
+ee1_2_vns = ["EE1A2","EE1A3","EE1A6","EE1A7","EE1A9","EE1A11",
+             "EE2A1","EE2A3","EE2A6","EE2A8","EE2A9","EE2A11","EE2A12"]
+ee1_2_sham = ["EE1A1","EE1A4","EE1A5","EE1A8","EE1A10",
+              "EE2A2","EE2A4","EE2A5","EE2A7","EE2A10"]
+
 #------ FIGURE INFO ------#
 fig_folder = "./figures"
 save_figs = True
 colored_backgrounds=True
 
-groups = [ee1_vns, ee1_sham]
+groups = {
+    "EE1": (ee1_vns, ee1_sham),
+    "EE2": (ee2_vns, ee2_sham),
+    "EE1_2": (ee1_2_vns, ee1_2_sham)
+}
 
 # to_plot = ["1afc", "2cfrt", "3ext1", "4ext2"] 
 # fig_filename = "ROW1"
@@ -88,7 +99,10 @@ for cohort in cohorts:
         # plt.tick_params(axis="both",which="major",labelsize=font_size)
 
         p_vals = []
-        all_dfs = get_df_from_xlsx(cohort, scorer)
+
+        file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
+
+        all_dfs = get_df_from_xlsx(file_path)
 
         for i, ax in enumerate(axes):
             s = to_plot[i]  # session code
@@ -99,7 +113,7 @@ for cohort in cohorts:
                 session_df = all_dfs[s.upper()]
 
                 y_label = "% Freezing" if i==0 else None
-                show_legend = (i==0) and fig_filename=="ROW1" #TODO make this less sus
+                show_legend = (i==0) and fig_filename=="ROW1" #first panel of ROW1. TODO make this less sus
 
                 if colored_backgrounds:
                     bg_color= graph_backgrounds.get(s.upper())
@@ -121,7 +135,7 @@ for cohort in cohorts:
                 session_p_vals = lineplot_bin_means(
                     ax,
                     session_df,
-                    groups,
+                    groups[cohort],
                     group_labels,
                     group_colors=group_colors,
                     session_name=s_name,
