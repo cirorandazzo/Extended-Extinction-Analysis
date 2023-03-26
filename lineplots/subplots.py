@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 import matplotlib.image as img
 
 from subplot_helpers import *
+from stats import run_stats, create_log_file
 from defaults import *
-# from lineplot_bin_means import *
+from make_bins import make_bins
 
 #------ DATA INFO - Fill in ------#
 
-# Projec
+# Project
 data_folder = "./data"
 project = "Extended Extinction"
 # cohorts = ["EE1","EE2"]
@@ -38,13 +39,19 @@ save_figs = True
 colored_backgrounds=True
 
 groups = {
-    "EE1": (ee1_vns, ee1_sham),
-    "EE2": (ee2_vns, ee2_sham),
-    "EE1_2": (ee1_2_vns, ee1_2_sham)
+    "EE1": {
+        "VNS": ee1_vns,
+        "SHAM": ee1_sham
+    },
+    "EE2": {
+        "VNS": ee2_vns,
+        "SHAM": ee2_sham
+    },
+    "EE1_2": {
+        "VNS": ee1_2_vns,
+        "SHAM": ee1_2_sham
+    },
 }
-
-# to_plot = ["1afc", "2cfrt", "3ext1", "4ext2"] 
-# fig_filename = "ROW1"
 
 rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
 
@@ -73,15 +80,29 @@ def figure_details(fig_filename):
 
 # TODO: add arrows?
 #   https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.ConnectionPatch.html?highlight=connectionpatch#matplotlib.patches.ConnectionPatch
-# TODO: refactor lineplot_bin_means, it is probably redundant.
+# TODO: refactor lineplot_means, it is probably redundant.
 #   would likely be better to directly call the helper functions somewhere.
 
 set_font_sizes(title_size, font_size)
 
 # shock = img.imread('./lineplots/lightning.png')
 
-first_plot = True  # only create new subfolder on first cohort plotted
-fig_subfolder = None
+fig_subfolder = make_fig_subfolder(fig_folder)
+
+log_filepath = create_log_file(
+        fig_subfolder,
+        cohorts,
+        scorer,
+        project=project
+    )
+
+pairwise_filepath = create_log_file(
+        fig_subfolder,
+        cohorts,
+        scorer,
+        project=project,
+        filename='PAIRWISE.txt'
+    )
 
 for cohort in cohorts:
     for fig_index, fig_filename in enumerate(rows_to_plot):
@@ -132,11 +153,20 @@ for cohort in cohorts:
                 #         arrowprops=dict(arrowstyle='-[, widthB=5.0, lengthB=.75'),
                 #     )
 
-                session_p_vals = lineplot_bin_means(
+                session_df = add_group_column(session_df,groups[cohort])
+
+                session_df = make_bins(session_df)
+
+                run_stats(
+                    session_df,
+                    s_name,
+                    log_filepath,
+                    pairwise_filepath=pairwise_filepath,
+                )
+
+                lineplot_means(
                     ax,
                     session_df,
-                    groups[cohort],
-                    group_labels,
                     group_colors=group_colors,
                     session_name=s_name,
                     show_legend=show_legend,
@@ -168,10 +198,6 @@ for cohort in cohorts:
                     horizontalalignment='center',
                     transform=ax.transAxes,
                     )
-                
-                session_p_vals = []
-
-            p_vals.append(session_p_vals)
 
         plt.subplots_adjust(wspace=subplot_spacing)
         
@@ -179,17 +205,11 @@ for cohort in cohorts:
         fig.text(0.5, 0, 'Bin (2-trial average)', ha='center')
 
         if save_figs:
-            if fig_index==0 and not first_plot: # fig_subfolder doesn't exist yet
-                fig_subfolder=None
-
             fig_subfolder = save_fig(
                 fig_folder,
-                f'{fig_filename}',
-                project,
+                fig_filename,
                 cohort,
                 scorer,
-                to_plot,
-                p_vals,
                 existing_subfolder=fig_subfolder  # if not 1st iteration, populated with created subfolder
             )
         

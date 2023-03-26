@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pingouin as pg
 
 import matplotlib.pyplot as plt
 import scipy.stats as stats
@@ -9,20 +10,19 @@ import datetime
 
 #--- EXTERNAL HELPERS---#
 
-def lineplot_bin_means(
+def lineplot_means(
     ax,
     df,
-    group_assignments,
-    group_labels,
     group_colors=None,
     session_name=None,
     show_legend=True,
-    show_sig=True,
     title_size=24,
     font_size=16,
     y_label="% Freezing",
     bg_color=None,
     subtitle=None,
+    show_sig=True,
+    p_vals=None,
 ):
 
     """
@@ -31,24 +31,17 @@ def lineplot_bin_means(
     TODO: document
     """
 
-    df_binned = _make_bins(df)
-    
+    group_labels = list(df['Group'].unique())
+
     # Separate into groups
-    data = []
-    # [df_binned.loc[f'A{group}'] for group in group_assignments]
-
-    for group in group_assignments:
-        animal_ids = group
-        if 'A' not in group[0]:  # combined data already has prefixes
-            animal_ids = [f'A{i}' for i in group]  # appends "A" to animal numbers
-        data.append(df_binned.loc[animal_ids])
-
+    data = [df.loc[df['Group']==group] for group in group_labels]
+    
     group_mean_by_bin = [group_df.mean() for group_df in data]
     group_error_by_bin = [group_df.sem() for group_df in data] 
     group_sizes = [len(grp) for grp in data]
 
     # Plot
-    p_vals = _make_axes(
+    _make_axes(
         ax,
         session_name,
         group_mean_by_bin,
@@ -58,11 +51,10 @@ def lineplot_bin_means(
         group_colors,
         font_size,
         title_size,
-        show_sig,
         show_legend,
         y_label,
-        data,
-        bg_color
+        bg_color,
+        p_vals=None # TODO: add pvals from ANOVA
     )
 
     if subtitle is not None:
@@ -74,9 +66,9 @@ def lineplot_bin_means(
             verticalalignment='center',
             horizontalalignment='center',
             transform=ax.transAxes,
-            )
-
-    return p_vals
+        )
+    
+    return
 
 
 def get_date_string(date_format="%Y-%m-%d"):
@@ -95,7 +87,6 @@ def set_font_sizes(title_size, font_size):
 
     plt.rc('font', **font)
     plt.rc('axes', **axes)
-
 
 
 def get_df_from_csv(
@@ -177,43 +168,25 @@ def get_df_from_xlsx(
 def save_fig(
     fig_folder,
     fig_filename,
-    project,
     cohort,
     scorer,
-    sessions_plotted,
-    p_vals,
     existing_subfolder=None,
     log_filename = "LOG",
-    cohort_in_filenames = True,
+    cohort_in_filename = True,
 ):
     """
     TODO: document
 
     """
 
-    if cohort_in_filenames:
+    if cohort_in_filename:
         fig_filename = f"{cohort}_{scorer}-{fig_filename}"
-        log_filename = f"{cohort}_{scorer}-{log_filename}"
 
     if existing_subfolder is not None:
         fig_subfolder = existing_subfolder
     else:
         # Make new subfolder
-        fig_subfolder = _make_fig_subfolder(fig_folder)
-
-
-    if not log_filename.endswith('.txt'):
-        log_filename = f'{log_filename}.txt'
-        
-    log_filename = os.path.join(fig_subfolder, log_filename)
-    
-    # Make new log file if necessary
-    if not os.path.exists(log_filename):
-        with open(log_filename,'a') as f:
-            f.write(project.upper() + " ANALYSIS" + "\n")
-            f.write("Cohort: " + cohort + "\n")
-            f.write("Scorer: " + scorer + "\n\n")
-        
+        fig_subfolder = make_fig_subfolder(fig_folder)
 
     # Save figure
     fig_file = os.path.join(fig_subfolder, fig_filename)
@@ -222,17 +195,10 @@ def save_fig(
         bbox_inches="tight",
     )
 
-    # Write p-vals to log
-    _log_pvals(fig_filename, sessions_plotted, p_vals, log_filename)
-
     return fig_subfolder
 
 
-
-
-#--- LOCAL HELPERS ---#
-
-def _make_fig_subfolder(fig_folder):
+def make_fig_subfolder(fig_folder):
     date = get_date_string()
     i=0
     while True:
@@ -246,61 +212,37 @@ def _make_fig_subfolder(fig_folder):
     return fig_subfolder
 
 
-def _log_pvals(
-        fig_filename,
-        sessions_plotted,
-        p_vals, 
-        log_filename
+#--- LOCAL HELPERS ---#
+
+def add_group_column(
+    df,
+    group_dict
 ):
-    with open(log_filename,'a') as f:
-        f.write(f"\nFigure: {fig_filename} \n")
-        for s_i, s_name in enumerate(sessions_plotted):
-            f.write(f"---{s_name}---\n")
-            session_p_vals = p_vals[s_i]
-            for bin_no, p in enumerate(session_p_vals):
-                p = np.around(p,5)
-                if p<=0.05:
-                    f.write("*")
-                f.write(f"{bin_no+1!s}: {p!s} \n")
-            f.write("\n")
+    """
+    TODO: document
 
+    group_dict: dictionary. keys are group labels, values are animal IDs within that group. eg, {"EE1": [1,3,4]}, "EE2": [2,5,6]}
+    """
 
-def _make_bins(df):
-    '''
-    Make new dataframe of bins, which consist of average of 2 trials
+    group_codes_by_id = [None] * len(df.index)
 
-    Notes on baseline trials:
-        - Denoted by "BL#" in original dataframe
-        - In binned output, BL trials are numbered -(n-1) to 0 rather than being labeled with a string (makes graphing easier); n = number of bl bins
-    '''
+    for group in group_dict:
+        if len(group_dict[group])==0:
+            continue
+        elif 'A' in group_dict[group][0]:
+            break  # combined data already has prefixes
+        else:
+            group_dict[group] = [f'A{i}' for i in group_dict[group]]  # appends "A" to animal numbers
 
-    df_binned = pd.DataFrame(index=df.index) # new df with same index
+    for i, animal in enumerate(df.index):
+        for group in group_dict:
+            if animal in group_dict[group]:
+                group_codes_by_id[i] = group
+                break
 
-    num_bl_trials = len([s for s in df.columns if "BL" in str(s).upper()])  # count number of baseline sessions in data
-    num_bl_bins = int(num_bl_trials/2)
-    num_nonbl_bins = int(df.shape[1] / 2) - num_bl_bins
+    df['Group'] = group_codes_by_id
 
-    # binning baseline sessions
-    for i in range(0, num_bl_bins):
-        # names of bl bins in original df
-        a = "BL"+str((2*i)+1)
-        b = "BL"+str((2*i)+2)
-        
-        trial = 1-(num_bl_bins-i)  # bl bins are called -(n-1) to 0; n= # bl bins
-
-        df_binned[trial] = df.loc[:,a:b].mean(axis=1) # add bl bin to new df
-
-    # binning non-BL sessions
-    for i in range(0, num_nonbl_bins):
-        a = (2*i)+1
-        b = (2*i)+2
-
-        trial = i+1
-
-        df_binned[trial] = df.loc[:,a:b].mean(axis=1)
-    
-    return df_binned
-
+    return df
 
 def _make_axes(
     ax,
@@ -312,12 +254,11 @@ def _make_axes(
     group_colors,
     font_size,
     title_size,
-    show_sig,
     show_legend,
     y_label,
-    data,
     bg_color,
-    line_width = 3
+    line_width = 3,
+    p_vals=None,
 ):
     """
     Given an Axes and a session, plot errorbar for each group in that session. Returns numpy array containing p-values between groups for each bin in this session.
@@ -353,9 +294,7 @@ def _make_axes(
     if bg_color is not None:
         ax.set_facecolor(color=bg_color)
 
-    p_vals = stats.ttest_ind(data[0],data[1], nan_policy="omit")[1]
-
-    if show_sig:
+    if p_vals is not None:
         _label_significance(ax, group_mean_by_bin, group_error_by_bin, p_vals, title_size)
         
     _add_x_labels(ax, trials=group_mean_by_bin[0].index)
@@ -365,7 +304,7 @@ def _make_axes(
     if show_legend:
         ax.legend()
 
-    return p_vals
+    return
 
 
 def _add_x_labels(ax, trials):
@@ -425,24 +364,3 @@ def _label_significance(
             horizontalalignment="center",
             fontsize=font_size,
         )
-
-
-def _get_sig_stars(p):
-    """
-    Given a p-value, returns string containing star label, as follows:
-        - < .0005:       ***
-        - [.0005, .005): **
-        - [.005, .05):   *
-        - >= 0.05: (empty string)
-    
-    
-    """
-
-    if p>=.05:
-        return ""
-    elif p<0.05 and p>=.005:
-        return "*"
-    elif p<.005 and p>= .0005:
-        return "**"
-    else:
-        return "***"

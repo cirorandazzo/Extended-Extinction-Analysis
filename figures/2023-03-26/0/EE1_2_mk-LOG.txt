@@ -1,0 +1,58 @@
+EXTENDED EXTINCTION ANALYSIS
+Cohorts: EE1_2
+Scorer: mk
+
+----(A) FEAR CONDITITIONING----
+SIG      Source         SS  DF1  DF2        MS       F  p-unc   np2   eps
+          Group      9.637    1   20     9.637   0.028  0.869 0.001   NaN
+***        Time 135963.030    4   80 33990.758 180.479  0.000 0.900 0.707
+    Interaction    227.859    4   80    56.965   0.302  0.876 0.015   NaN
+
+----(B) FEAR RECALL----
+SIG      Source      SS  DF1  DF2      MS     F  p-unc   np2   eps
+          Group 388.051    1   21 388.051 1.323  0.263 0.059   NaN
+           Time  15.459    1   21  15.459 0.503  0.486 0.023 1.000
+    Interaction  55.609    1   21  55.609 1.809  0.193 0.079   NaN
+
+----(C) EXTINCTION DAY 1----
+SIG      Source        SS  DF1  DF2       MS     F  p-unc   np2   eps
+          Group   472.410    1   21  472.410 0.231  0.635 0.011   NaN
+***        Time 19346.727    9  189 2149.636 4.261  0.000 0.169 0.720
+    Interaction  2294.523    9  189  254.947 0.505  0.869 0.024   NaN
+
+----(D) EXTINCTION DAY 2----
+SIG      Source        SS  DF1  DF2       MS     F  p-unc   np2   eps
+          Group   242.010    1   21  242.010 0.258  0.617 0.012   NaN
+***        Time 24212.995    9  189 2690.333 4.554  0.000 0.178 0.678
+    Interaction  6171.210    9  189  685.690 1.161  0.323 0.052   NaN
+
+----(E) RETENTION----
+SIG      Source      SS  DF1  DF2      MS     F  p-unc   np2   eps
+          Group  15.556    1   21  15.556 0.071  0.792 0.003   NaN
+           Time 386.473    1   21 386.473 1.790  0.195 0.079 1.000
+    Interaction 437.960    1   21 437.960 2.029  0.169 0.088   NaN
+
+----(F) SHORT-TERM SR----
+SIG      Source       SS  DF1  DF2       MS     F  p-unc   np2   eps
+          Group   51.509    1   21   51.509 0.067  0.798 0.003   NaN
+           Time 1166.727    1   21 1166.727 3.590  0.072 0.146 1.000
+    Interaction   18.027    1   21   18.027 0.055  0.816 0.003   NaN
+
+----(G) LONG-TERM SR----
+SIG      Source      SS  DF1  DF2      MS     F  p-unc   np2   eps
+          Group 133.951    1   21 133.951 0.239  0.630 0.011   NaN
+           Time 295.894    1   21 295.894 1.482  0.237 0.066 1.000
+    Interaction 382.130    1   21 382.130 1.913  0.181 0.084   NaN
+
+----(H) RENEWAL----
+SIG      Source       SS  DF1  DF2       MS      F  p-unc   np2   eps
+          Group  259.202    1   21  259.202  0.469  0.501 0.022   NaN
+ **        Time 1020.531    1   21 1020.531 10.056  0.005 0.324 1.000
+    Interaction   17.663    1   21   17.663  0.174  0.681 0.008   NaN
+
+----(I) RST. TEST----
+SIG      Source      SS  DF1  DF2      MS     F  p-unc   np2   eps
+          Group 671.770    1   20 671.770 1.065  0.314 0.051   NaN
+           Time   9.091    1   20   9.091 0.056  0.816 0.003 1.000
+    Interaction 152.275    1   20 152.275 0.936  0.345 0.045   NaN
+

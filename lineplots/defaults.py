@@ -43,3 +43,24 @@ session_subtitles = {
 }
 
 time_per_trial = 30  # seconds per trial
+
+def figure_details(fig_filename):
+    if fig_filename=="ROW1":
+        to_plot = ['1-AFC', '2-CFRT', '3-EXT1', '4-EXT2']
+
+        rel_widths = [2.5,1.5,4,4]
+        rows = 1
+        cols = 4
+        size = (21,5)
+        subplot_spacing = 0.05
+
+    elif fig_filename=="ROW2":
+        to_plot = ['5-RET', '6-SR1', '7-SR2', '8-REN', 'REINSTATEMENT', '9-RST']
+
+        rel_widths = [1,1,1,1,0.25,1]
+        rows = 1
+        cols = 6
+        size = (21,5) 
+        subplot_spacing = 0.1
+
+    return to_plot, rel_widths, rows, cols, size, subplot_spacing
