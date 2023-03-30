@@ -6,8 +6,12 @@ import matplotlib.image as img
 
 from subplot_helpers import *
 from stats import run_stats, create_log_file
-from defaults import *
+
 from make_bins import make_bins
+
+from defaults import *
+from ee_group_info import *
+
 
 #------ DATA INFO - Fill in ------#
 
@@ -15,68 +19,17 @@ from make_bins import make_bins
 data_folder = "./data"
 project = "Extended Extinction"
 # cohorts = ["EE1","EE2"]
-cohorts = ["EE1_2"]  # combined EE1 + EE2 data
-scorer = "mk"
+cohorts = ["EET"]  # combined EE1 + EE2 data
+# rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
+rows_to_plot = ["EET"]
+scorer = "hp"
 
-# Group Info
-ee1_vns = [2,3,6,7,9,11]
-ee1_sham = [1,4,5,8,10]
-ee1_exclude = []
-
-ee2_vns = [1,3,6,8,9,11,12]
-ee2_sham = [2,4,5,7,10]
-ee2_exclude = [6]
-
-# combined group data includes cohort in animal ID. it aint pretty, but itll (probably) work
-ee1_2_vns = ["EE1A2","EE1A3","EE1A6","EE1A7","EE1A9","EE1A11",
-             "EE2A1","EE2A3","EE2A6","EE2A8","EE2A9","EE2A11","EE2A12"]
-ee1_2_sham = ["EE1A1","EE1A4","EE1A5","EE1A8","EE1A10",
-              "EE2A2","EE2A4","EE2A5","EE2A7","EE2A10"]
 
 #------ FIGURE INFO ------#
 fig_folder = "./figures"
 save_figs = True
 colored_backgrounds=True
 
-groups = {
-    "EE1": {
-        "VNS": ee1_vns,
-        "SHAM": ee1_sham
-    },
-    "EE2": {
-        "VNS": ee2_vns,
-        "SHAM": ee2_sham
-    },
-    "EE1_2": {
-        "VNS": ee1_2_vns,
-        "SHAM": ee1_2_sham
-    },
-}
-
-rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
-
-
-# TODO: de-jank this?
-def figure_details(fig_filename):
-    if fig_filename=="ROW1":
-        to_plot = ['1-AFC', '2-CFRT', '3-EXT1', '4-EXT2']
-
-        rel_widths = [2.5,1.5,4,4]
-        rows = 1
-        cols = 4
-        size = (21,5)
-        subplot_spacing = 0.05
-
-    elif fig_filename=="ROW2":
-        to_plot = ['5-RET', '6-SR1', '7-SR2', '8-REN', 'REINSTATEMENT', '9-RST']
-
-        rel_widths = [1,1,1,1,0.25,1]
-        rows = 1
-        cols = 6
-        size = (21,5) 
-        subplot_spacing = 0.1
-
-    return to_plot, rel_widths, rows, cols, size, subplot_spacing
 
 # TODO: add arrows?
 #   https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.ConnectionPatch.html?highlight=connectionpatch#matplotlib.patches.ConnectionPatch
@@ -96,7 +49,7 @@ log_filepath = create_log_file(
         project=project
     )
 
-pairwise_filepath = create_log_file(
+posthoc_filepath = create_log_file(
         fig_subfolder,
         cohorts,
         scorer,
@@ -107,7 +60,7 @@ pairwise_filepath = create_log_file(
 for cohort in cohorts:
     for fig_index, fig_filename in enumerate(rows_to_plot):
         
-        to_plot, rel_widths, rows, cols, size, subplot_spacing = figure_details(fig_filename)
+        to_plot, rel_widths, rows, cols, size, subplot_spacing, session_names = figure_details(fig_filename)
         
         fig, axes = plt.subplots(
             nrows=rows,
@@ -118,8 +71,6 @@ for cohort in cohorts:
         )
 
         # plt.tick_params(axis="both",which="major",labelsize=font_size)
-
-        p_vals = []
 
         file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
 
@@ -134,7 +85,7 @@ for cohort in cohorts:
                 session_df = all_dfs[s.upper()]
 
                 y_label = "% Freezing" if i==0 else None
-                show_legend = (i==0) and fig_filename=="ROW1" #first panel of ROW1. TODO make this less sus
+                show_legend = (i==0) and (fig_filename=="ROW1" or fig_filename=="EET") #first panel of ROW1. TODO make this less sus
 
                 if colored_backgrounds:
                     bg_color= graph_backgrounds.get(s.upper())
@@ -161,7 +112,7 @@ for cohort in cohorts:
                     session_df,
                     s_name,
                     log_filepath,
-                    pairwise_filepath=pairwise_filepath,
+                    posthoc_filepath=posthoc_filepath,
                 )
 
                 lineplot_means(

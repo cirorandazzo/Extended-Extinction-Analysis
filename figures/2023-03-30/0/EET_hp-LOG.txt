@@ -1,0 +1,28 @@
+EXTENDED EXTINCTION ANALYSIS
+Cohorts: EET
+Scorer: hp
+
+----(A) FEAR CONDITITIONING----
+SIG Source  ddof1  ddof2      F  p-unc   ng2   eps
+***   Time      4     20 27.946  0.000 0.762 0.490
+
+----(B) FEAR RECALL----
+SIG Source  ddof1  ddof2     F  p-unc   ng2   eps
+      Time      1      5 0.001  0.975 0.000 1.000
+
+----(C) EXTINCTION DAY 1----
+SIG Source  ddof1  ddof2     F  p-unc  p-GG-corr   ng2   eps  sphericity  W-spher  p-spher
+      Time      4     16 1.666  0.207      0.254 0.251 0.433       False    0.000    0.007
+
+----(D) EXTINCTION DAY 2----
+SIG Source  ddof1  ddof2     F  p-unc   ng2   eps
+      Time      4     20 0.401  0.806 0.049 0.513
+
+----(E) RETENTION----
+SIG Source  ddof1  ddof2     F  p-unc   ng2   eps
+      Time      1      5 0.030  0.870 0.002 1.000
+
+----(F) SPONT. REC.----
+SIG Source  ddof1  ddof2     F  p-unc   ng2   eps
+      Time      1      5 0.461  0.527 0.048 1.000
+

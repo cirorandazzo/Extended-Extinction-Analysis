@@ -31,7 +31,7 @@ def lineplot_means(
     TODO: document
     """
 
-    group_labels = list(df['Group'].unique())
+    group_labels = list(df['Group'].dropna().unique())
 
     # Separate into groups
     data = [df.loc[df['Group']==group] for group in group_labels]
@@ -229,10 +229,12 @@ def add_group_column(
     for group in group_dict:
         if len(group_dict[group])==0:
             continue
-        elif 'A' in group_dict[group][0]:
+        elif isinstance(group_dict[group][0],int):
+            group_dict[group] = [f'A{i}' for i in group_dict[group]]  # appends "A" to animal numbers
+        elif isinstance(group_dict[group][0],str) and ('A' in group_dict[group][0]):
             break  # combined data already has prefixes
         else:
-            group_dict[group] = [f'A{i}' for i in group_dict[group]]  # appends "A" to animal numbers
+            raise KeyError
 
     for i, animal in enumerate(df.index):
         for group in group_dict:
@@ -266,12 +268,14 @@ def _make_axes(
     # plot errorbar for each group, on same Axes
     for grp_i in range(0,len(group_mean_by_bin)):
         
+        group = group_labels[grp_i]
+
         ax.errorbar(
             x=group_mean_by_bin[grp_i].index,
             y=group_mean_by_bin[grp_i],
             yerr=group_error_by_bin[grp_i],
-            label= group_labels[grp_i] + " (%(n)i)"%{'n':group_sizes[grp_i]},
-            color=group_colors[grp_i],
+            label= group + " (%(n)i)"%{'n':group_sizes[grp_i]},
+            color=group_colors[group],
             marker=".", markersize=font_size,
             capsize=8,
             elinewidth=line_width,
@@ -302,7 +306,7 @@ def _make_axes(
     # TODO : annotate for VNS label on top
 
     if show_legend:
-        ax.legend()
+        ax.legend(loc='lower right')
 
     return
 

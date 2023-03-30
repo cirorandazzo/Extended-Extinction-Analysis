@@ -15,3 +15,4 @@ Raw scoring sheets have been cleaned and organized into files by group and score
 
 - Second scorer on `ee2-cdr.xlsx` was CDR for some behavior sessions, HP for other sessions.
 - `ee1_2-mk-pivoted.csv` is a sample df after pivoting for pinguoin input (see `stats.py` function `_pivot_df`)
+- EET A3 excluded for insufficient conditioned fear response directly following AFC (D2, conditioned fear response test/Fear Recall)

@@ -1,11 +1,16 @@
-group_colors = ["red", "blue"]
-group_labels = ["VNS", "SHAM"]
+# group_labels = ["VNS", "SHAM"]
+
+group_colors = {
+    "VNS"  : "red",
+    "SHAM" : "blue",
+    "CTRL" : "blue",
+}
 
 title_size = 18
 font_size = 16
 
 
-session_names = { 
+ee1_2_session_names = { 
     "1-AFC"   : "(a) Fear condititioning",
     "2-CFRT"  : "(b) Fear recall",
     "3-EXT1"  : "(c) Extinction Day 1",
@@ -15,6 +20,15 @@ session_names = {
     "7-SR2"   : "(g) Long-Term SR",
     "8-REN"   : "(h) Renewal",
     "9-RST"   : "(i) Rst. Test"
+}
+
+eet_session_names = { 
+    "1-AFC"   : "(a) Fear condititioning",
+    "2-CFRT"  : "(b) Fear recall",
+    "3-EXT1"  : "(c) Extinction Day 1",
+    "4-EXT2"  : "(d) Extinction Day 2",
+    "5-RET"   : "(e) Retention",
+    "6-SR1"   : "(f) Spont. Rec.",
 }
 
 ctx_a = (0.9058,0.9019,0.9019)
@@ -53,6 +67,7 @@ def figure_details(fig_filename):
         cols = 4
         size = (21,5)
         subplot_spacing = 0.05
+        session_names = ee1_2_session_names
 
     elif fig_filename=="ROW2":
         to_plot = ['5-RET', '6-SR1', '7-SR2', '8-REN', 'REINSTATEMENT', '9-RST']
@@ -62,5 +77,16 @@ def figure_details(fig_filename):
         cols = 6
         size = (21,5) 
         subplot_spacing = 0.1
+        session_names = ee1_2_session_names
 
-    return to_plot, rel_widths, rows, cols, size, subplot_spacing
+    elif fig_filename=="EET":
+        to_plot = ['1-AFC', '2-CFRT', '3-EXT1', '4-EXT2', '5-RET', '6-SR1']
+
+        rel_widths = [2, 1, 2, 2, 1.5, 1.5]
+        rows = 1
+        cols = 6
+        size = (22,5) 
+        subplot_spacing = 0.1
+        session_names = eet_session_names
+
+    return to_plot, rel_widths, rows, cols, size, subplot_spacing, session_names

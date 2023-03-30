@@ -8,8 +8,11 @@ def run_stats(
     df,
     session_name,
     log_filepath,
-    pairwise_filepath=None,
-
+    posthoc_filepath=None,
+    dv='Freezing',
+    within='Time',
+    subject='Subject ID',
+    between='Group'
 ):
     """
     TODO: documentation
@@ -17,45 +20,51 @@ def run_stats(
 
     pivoted_df = _pivot_df(df)
 
-    anova_summary = pg.mixed_anova(
-        pivoted_df,
-        dv='Freezing',
-        between='Group',
-        within='Time',
-        subject='Subject ID',
-    )
+    anova_summary = None
+    posthoc_summary = None
 
+    num_groups = len(df['Group'].dropna().unique())
+    stats_parameters = {
+        'dv'      : dv,
+        'within'  : within,
+        'subject' : subject,
+        'between' : between,
+    }
+
+    # run anova & posthoc stats
+    if num_groups == 1:
+        del stats_parameters['between']
+        anova_summary = pg.rm_anova(pivoted_df.reset_index(), **stats_parameters)
+    elif num_groups > 1:
+        anova_summary = pg.mixed_anova(pivoted_df, **stats_parameters)
+    else:
+        raise KeyError
+
+
+    # get sig stars
     anova_stars = anova_summary['p-unc'].apply(_get_sig_stars)
     anova_summary.insert(0,'SIG',anova_stars)
 
+    # write stats to file
     session_title = f'----{session_name.upper()}----\n'
 
-    with open(log_filepath,'a') as f:
-        f.write(session_title)
-        
-        txt_summary = anova_summary.to_string(header=True, index=False,float_format="{:.3f}".format)
-        f.write(txt_summary + '\n\n')
+    _write_stats_summary(anova_summary, session_title, log_filepath)
 
-    if pairwise_filepath is not None:
-        pairwise = pg.pairwise_tests(
-            data=pivoted_df.reset_index(),
-            dv='Freezing',
-            between='Group',
-            within='Time',
-            subject='Subject ID'
-        )
+    if posthoc_filepath is not None:
+        posthoc_df = pivoted_df.reset_index()
+        if num_groups == 1:
+            try:
+                posthoc_df.drop(columns='Group', inplace=True)
+            except KeyError:
+                pass
 
-        pairwise_stars = pairwise['p-unc'].apply(_get_sig_stars)
-        pairwise.insert(0,'SIG',pairwise_stars)
+        posthoc_summary = pg.pairwise_tests(posthoc_df.reset_index(), **stats_parameters)
 
-        with open(pairwise_filepath,'a') as f:
-            f.write(session_title)
-            
-            txt_summary = pairwise.to_string(header=True, index=False,float_format="{:.3f}".format)
-            f.write(txt_summary + '\n\n')
+        posthoc_stars = posthoc_summary['p-unc'].apply(_get_sig_stars)
+        posthoc_summary.insert(0,'SIG',posthoc_stars)
+        _write_stats_summary(posthoc_summary, session_title, posthoc_filepath)
 
     return
-
 
 def _pivot_df(
     df,
@@ -149,3 +158,11 @@ def _get_sig_stars(p):
         return "**"
     else:
         return "***"
+    
+def _write_stats_summary(df, session_title, filepath, float_format='{:.3f}'.format):
+    with open(filepath,'a') as f:
+            f.write(session_title)
+            
+            txt_summary = df.to_string(header=True, index=False,float_format=float_format)
+            f.write(txt_summary + '\n\n')
+    return
