@@ -6,6 +6,9 @@ from stats import run_stats, create_log_file
 
 from make_bins import make_bins
 
+import sys
+sys.path.append('./subplots/project_info')
+
 from defaults import *
 from ee_group_info import *
 
