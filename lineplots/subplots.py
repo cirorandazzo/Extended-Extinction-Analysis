@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
-import matplotlib.image as img
+# import matplotlib.image as img
 
 from subplot_helpers import *
 from stats import run_stats, create_log_file
@@ -157,11 +157,13 @@ for cohort in cohorts:
 
         if save_figs:
             fig_subfolder = save_fig(
+                fig,
                 fig_folder,
                 fig_filename,
                 cohort,
                 scorer,
-                existing_subfolder=fig_subfolder  # if not 1st iteration, populated with created subfolder
+                existing_subfolder=fig_subfolder,  # if not 1st iteration, populated with created subfolder
+                pickle_fig=True,
             )
         
         plt.close(fig)

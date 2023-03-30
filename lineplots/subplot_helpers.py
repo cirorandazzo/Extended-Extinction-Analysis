@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pingouin as pg
+import pickle
 
 import matplotlib.pyplot as plt
 import scipy.stats as stats
@@ -166,13 +167,14 @@ def get_df_from_xlsx(
 
 
 def save_fig(
+    fig,
     fig_folder,
     fig_filename,
     cohort,
     scorer,
     existing_subfolder=None,
-    log_filename = "LOG",
     cohort_in_filename = True,
+    pickle_fig=True,
 ):
     """
     TODO: document
@@ -194,6 +196,12 @@ def save_fig(
         f"{fig_file}.png",
         bbox_inches="tight",
     )
+
+    if pickle_fig:  # also save fig as pickle, so it can be reloaded/edited
+        pickle.dump(
+            fig,
+            open(f'{fig_file}.pickle','wb')
+        )
 
     return fig_subfolder
 
