@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-
 import matplotlib.pyplot as plt
 # import matplotlib.image as img
 
@@ -18,9 +15,9 @@ from ee_group_info import *
 # Project
 data_folder = "./data"
 project = "Extended Extinction"
-# cohorts = ["EE1","EE2"]
-cohorts = ["EET"]  # combined EE1 + EE2 data
+# cohorts = ["EE1","EE2"] # combined EE1 + EE2 data
 # rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
+cohorts = ["EET"]  
 rows_to_plot = ["EET"]
 scorer = "hp"
 
@@ -72,9 +69,10 @@ for cohort in cohorts:
 
         # plt.tick_params(axis="both",which="major",labelsize=font_size)
 
-        file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
+        data_file_path = os.path.join(data_folder, f'{cohort.lower()}-{scorer.lower()}.xlsx')
 
-        all_dfs = get_df_from_xlsx(file_path)
+        all_dfs = get_df_from_xlsx(data_file_path)
+        # TODO: pickle dfs to not fetch from xlsx each time
 
         for i, ax in enumerate(axes):
             s = to_plot[i]  # session code
@@ -85,7 +83,7 @@ for cohort in cohorts:
                 session_df = all_dfs[s.upper()]
 
                 y_label = "% Freezing" if i==0 else None
-                show_legend = (i==0) and (fig_filename=="ROW1" or fig_filename=="EET") #first panel of ROW1. TODO make this less sus
+                show_legend = (i==0) and (fig_filename=="ROW1" or fig_filename=="EET") #first panel of ROW1. TODO: make this less sus
 
                 if colored_backgrounds:
                     bg_color= graph_backgrounds.get(s.upper())

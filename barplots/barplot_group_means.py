@@ -4,30 +4,30 @@ import matplotlib.pyplot as plt
 from barplot_brackets import *
 
 def barplot_group_means(
-    x,
     y,
     lbls,
+    fig=None,
+    ax=None,
     error="STD", 
     p=None,
     colors="blue",
+    bg_color=None,
     w=0.8,
     size=(6,6),
     ylbl="Freezing (%)",
-    show=False
+    show=False,
+    title=None,
 ):
 
     """Bar plot of group means
 
     TODO: edit this, make the way it deals with groups more similar to line plot
 
-    @type x: list of int
-    @param x: x coord for bar corresponding to each group
-
     @type y: list of pandas series
     @param y: Each entry in this list represents a group, and contains list of values for each individual; mean of each group is plotted
     
     @type lbls: list of strings
-    @param lbls: labels for each bar, in the same order as x/y
+    @param lbls: labels for each bar, in the same order as y
     
     @type error: str
     @param error: determines whether error bars are added, "STD" or None
@@ -54,32 +54,44 @@ def barplot_group_means(
     """
 
     # Graph
-    fig, ax = plt.subplots(figsize=size)
+    if fig is None and ax is None:
+        fig, ax = plt.subplots(figsize=size)
+    else:
+        ax.clear()
 
+    if isinstance(y, pd.Series):
+        y = [y]  # handle only 1 group being passed as a pandas Series.
+
+    x = len(y)  # how many bars?
     bars = [group.mean() for group in y] # bar height = group mean
+
     if error.upper() == "STD":
         error_bars = [group.std() for group in y]  # error bar height = STD
 
     ax.bar(
-        x=x,
+        x=range(x),
         height=bars,
         tick_label=lbls,
         color=colors,
         width=w,
         yerr=error_bars,
-        capsize=12
+        capsize=12,
     )
 
     ax.set(
         # xlim=(0,5),
-        ylim=(0,120),
-        yticks=range(0,120,20),
-        ylabel=ylbl
+        ylim=(0,100),
+        yticks=range(0,101,20),
+        ylabel=ylbl,
+        title=title,
     )
 
-    for i in range(len(x)):
+    if bg_color is not None:
+        ax.set_facecolor(color=bg_color)
+
+    for i in range(x):
         ax.scatter(
-            x=x[i]+np.zeros(len(y[i])),
+            x=i+np.zeros(len(y[i])),
             y=y[i],
             s=60,
             color="black",
