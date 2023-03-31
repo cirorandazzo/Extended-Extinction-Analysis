@@ -56,6 +56,8 @@ session_subtitles = {
     "9-RST"   : "50d. post-extinction",
 }
 
+barplot_sessions = ["2-CFRT", "5-RET", "6-SR1", "7-SR2", "8-REN", "9-RST"]
+
 time_per_trial = 30  # seconds per trial
 
 def figure_details(fig_filename):

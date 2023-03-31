@@ -4,30 +4,27 @@ import matplotlib.pyplot as plt
 from barplot_brackets import *
 
 def barplot_group_means(
-    y,
-    lbls,
-    fig=None,
+    subj_means_by_group,
     ax=None,
-    error="STD", 
-    p=None,
-    colors="blue",
+    group_colors=None,
+    title=None,
+    font_size=26,
+    y_label="Freezing (%)",
     bg_color=None,
+    subtitle=None,
+    p=None,
+    # ---barplot-specific--- #
+    error="STD", 
     w=0.8,
     size=(6,6),
-    ylbl="Freezing (%)",
-    show=False,
-    title=None,
 ):
 
     """Bar plot of group means
 
     TODO: edit this, make the way it deals with groups more similar to line plot
 
-    @type y: list of pandas series
-    @param y: Each entry in this list represents a group, and contains list of values for each individual; mean of each group is plotted
-    
-    @type lbls: list of strings
-    @param lbls: labels for each bar, in the same order as y
+    @type subject_means_by_group: dict
+    @param subject_means_by_group: dict where keys are group labels and value for each key is a pandas series containing mean for each individual subject in a given session
     
     @type error: str
     @param error: determines whether error bars are added, "STD" or None
@@ -35,14 +32,14 @@ def barplot_group_means(
     @type p: int
     @param p: p value between 2 groups
     
-    @type colors: see matplotlib documentation
-    @param colors: contains color information for each bar
+    @type colors: dict
+    @param colors: keys are group names, values contain color information for each bar (see Matplotlib for color picking documentation)
     
     @type w: int
     @param w: bar width
 
     @type size: list of float
-    @param size: size of figure (in inches, probably?)
+    @param size: dimensions of figure to create if not passed a pre-existing plt.axes
 
     @type ylbl: str
     @param ylbl: Label for y-axis of plot
@@ -53,26 +50,27 @@ def barplot_group_means(
     @returns: fig, ax (see matplotlib)
     """
 
-    # Graph
-    if fig is None and ax is None:
+    fig = None
+    if ax is None:
         fig, ax = plt.subplots(figsize=size)
     else:
         ax.clear()
 
-    if isinstance(y, pd.Series):
-        y = [y]  # handle only 1 group being passed as a pandas Series.
-
-    x = len(y)  # how many bars?
-    bars = [group.mean() for group in y] # bar height = group mean
+    x = len(subj_means_by_group)  # how many bars? 
+    
+    bars = [subj_means_by_group[group].mean() for group in subj_means_by_group] # bar height = group mean
 
     if error.upper() == "STD":
-        error_bars = [group.std() for group in y]  # error bar height = STD
+        error_bars = [subj_means_by_group[group].std() for group in subj_means_by_group] # error bar height = STD
+
+    if isinstance(group_colors, dict):
+        group_colors = [group_colors[group] for group in subj_means_by_group]
 
     ax.bar(
         x=range(x),
         height=bars,
-        tick_label=lbls,
-        color=colors,
+        tick_label=list(subj_means_by_group.keys()),
+        color=group_colors,
         width=w,
         yerr=error_bars,
         capsize=12,
@@ -82,23 +80,35 @@ def barplot_group_means(
         # xlim=(0,5),
         ylim=(0,100),
         yticks=range(0,101,20),
-        ylabel=ylbl,
+        ylabel=y_label,
         title=title,
+        facecolor=bg_color,
     )
 
     if bg_color is not None:
         ax.set_facecolor(color=bg_color)
 
-    for i in range(x):
+    for i,group in enumerate(subj_means_by_group):
         ax.scatter(
-            x=i+np.zeros(len(y[i])),
-            y=y[i],
+            x=i+np.zeros(len(subj_means_by_group[group])),
+            y=subj_means_by_group[group],
             s=60,
             color="black",
             marker="o",
             facecolors="none",
             edgecolors="black"
             )
+
+    if subtitle is not None:
+        ax.text(
+            0.5, 0.95, subtitle,
+            fontsize=font_size,
+            color='black',
+            fontstyle='italic',
+            verticalalignment='center',
+            horizontalalignment='center',
+            transform=ax.transAxes,
+        )
 
     if p is not None:
         barplot_brackets(
@@ -111,7 +121,16 @@ def barplot_group_means(
             fs=16
         )
 
-    if show:
-        plt.show(fig)
-
     return fig, ax
+
+def subj_mean_by_group(df):
+    df2 = df.dropna(axis=0, subset='Group')  # drop rows without group
+
+    subj_mean_by_group = {}
+    for group in df2['Group'].unique():
+        subj_means = df2[df2['Group']==group].mean(axis=1)
+        subj_means.drop(columns='Group', inplace=True)
+        
+        subj_mean_by_group[group] = subj_means
+
+    return subj_mean_by_group

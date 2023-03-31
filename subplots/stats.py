@@ -13,18 +13,26 @@ def run_stats(
     within='Time',
     subject='Subject ID',
     between='Group',
+    intersession=False,
     cohort=None
 ):
     """
     TODO: documentation
     """
+    pivoted_df = None
+    num_groups = 0
 
-    pivoted_df = _pivot_df(df)
+    if intersession:
+        pivoted_df = _pivot_intersession_df(df)
+        num_groups = len(pivoted_df['Group'].dropna().unique())
+    else:
+        pivoted_df = _pivot_df(df)
+        num_groups = len(df['Group'].dropna().unique())
+
 
     anova_summary = None
     posthoc_summary = None
 
-    num_groups = len(df['Group'].dropna().unique())
     stats_parameters = {
         'dv'      : dv,
         'within'  : within,
@@ -66,6 +74,30 @@ def run_stats(
         _write_stats_summary(posthoc_summary, session_title, posthoc_filepath)
 
     return
+
+
+def _pivot_intersession_df(a):
+    df = pd.DataFrame(columns=['Freezing','Group','Session'])
+    
+    for session in a:
+        for group in a[session]:
+            freezing_series = a[session][group]
+
+            session_series = pd.Series([session]*len(freezing_series))
+            session_series.index = freezing_series.index
+
+            group_series = pd.Series([group]*len(freezing_series))
+            group_series.index = freezing_series.index
+            
+            df2 = pd.concat([freezing_series,group_series,session_series], axis=1)
+            df2.columns = ['Freezing', 'Group', 'Session']
+
+            df = pd.concat([df, df2], axis=0)
+
+    df['Subject ID'] = df.index
+    df['Freezing'] = df['Freezing'].astype(np.float64)
+
+    return df
 
 def _pivot_df(
     df,

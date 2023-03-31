@@ -1,0 +1,35 @@
+EXTENDED EXTINCTION ANALYSIS
+Cohort: EE2
+Scorer: mk
+
+----INTERSESSION----
+SIG      Source        SS  DF1  DF2       MS      F  p-unc   np2   eps
+          Group     2.593    1   10    2.593  0.003  0.959 0.000   NaN
+***     Session 37375.395    5   50 7475.079 38.899  0.000 0.795 0.630
+    Interaction  1009.304    5   50  201.861  1.050  0.399 0.095   NaN
+
+----INTERSESSION----
+SIG        Contrast Session      A     B Paired  Parametric      T    dof alternative  p-unc      BF10  hedges
+***         Session       - 2-CFRT 5-RET   True        True 15.386 11.000   two-sided  0.000 1.163e+06   4.819
+***         Session       - 2-CFRT 6-SR1   True        True  8.243 11.000   two-sided  0.000  4043.625   2.881
+***         Session       - 2-CFRT 7-SR2   True        True  6.276 11.000   two-sided  0.000   447.155   2.273
+***         Session       - 2-CFRT 8-REN   True        True  9.653 11.000   two-sided  0.000 1.588e+04   3.701
+***         Session       - 2-CFRT 9-RST   True        True  7.845 11.000   two-sided  0.000   2667.56   2.644
+  *         Session       -  5-RET 6-SR1   True        True -3.095 11.000   two-sided  0.010     5.826  -0.841
+ **         Session       -  5-RET 7-SR2   True        True -4.704 11.000   two-sided  0.001    58.082  -1.836
+            Session       -  5-RET 8-REN   True        True -0.197 11.000   two-sided  0.847     0.292  -0.054
+ **         Session       -  5-RET 9-RST   True        True -4.079 11.000   two-sided  0.002    24.139  -1.363
+  *         Session       -  6-SR1 7-SR2   True        True -2.865 11.000   two-sided  0.015     4.184  -0.725
+ **         Session       -  6-SR1 8-REN   True        True  4.347 11.000   two-sided  0.001    35.314   0.657
+            Session       -  6-SR1 9-RST   True        True -1.099 11.000   two-sided  0.295     0.474  -0.366
+***         Session       -  7-SR2 8-REN   True        True  5.141 11.000   two-sided  0.000    105.05   1.440
+            Session       -  7-SR2 9-RST   True        True  0.919 11.000   two-sided  0.378      0.41   0.375
+ **         Session       -  8-REN 9-RST   True        True -3.996 11.000   two-sided  0.002    21.441  -1.064
+              Group       -   SHAM   VNS  False        True -0.045  4.502   two-sided  0.966     0.471  -0.029
+    Session * Group  2-CFRT   SHAM   VNS  False        True -1.070  4.351   two-sided  0.340     0.671  -0.683
+    Session * Group   5-RET   SHAM   VNS  False        True  0.095  6.316   two-sided  0.927     0.472   0.055
+    Session * Group   6-SR1   SHAM   VNS  False        True  0.028  6.175   two-sided  0.978     0.471   0.017
+    Session * Group   7-SR2   SHAM   VNS  False        True  0.679  6.206   two-sided  0.522     0.545   0.398
+    Session * Group   8-REN   SHAM   VNS  False        True  0.644  4.149   two-sided  0.554     0.537   0.416
+    Session * Group   9-RST   SHAM   VNS  False        True -0.783  6.023   two-sided  0.463     0.571  -0.462
+

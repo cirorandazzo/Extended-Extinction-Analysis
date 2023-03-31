@@ -12,18 +12,17 @@ import datetime
 #--- EXTERNAL HELPERS---#
 
 def lineplot_means(
-    ax,
     df,
+    ax,
     group_colors=None,
-    session_name=None,
-    show_legend=True,
+    title=None,
     title_size=24,
     font_size=16,
     y_label="% Freezing",
     bg_color=None,
     subtitle=None,
-    show_sig=True,
-    p_vals=None,
+    p=None,
+    show_legend=True,
 ):
 
     """
@@ -44,7 +43,7 @@ def lineplot_means(
     # Plot
     _make_axes(
         ax,
-        session_name,
+        title,
         group_mean_by_bin,
         group_error_by_bin,
         group_sizes,
@@ -198,10 +197,8 @@ def save_fig(
     )
 
     if pickle_fig:  # also save fig as pickle, so it can be reloaded/edited
-        pickle.dump(
-            fig,
-            open(f'{fig_file}.pickle','wb')
-        )
+        with open(f'{fig_file}.pickle','wb') as f:
+            pickle.dump(fig,f)
 
     return fig_subfolder
 
@@ -256,7 +253,7 @@ def add_group_column(
 
 def _make_axes(
     ax,
-    session_name,
+    title,
     group_mean_by_bin,
     group_error_by_bin,
     group_sizes,
@@ -296,7 +293,7 @@ def _make_axes(
     xmax = max(group_mean_by_bin[0].index)+0.5
 
     ax.set(
-        title=session_name,
+        title=title,
         xlim=[xmin,xmax],
         xticks=list(group_mean_by_bin[0].index),  #[i for i in range(1,len(group_mean_by_bin[0])+1)],
         ylim=[0,100],
