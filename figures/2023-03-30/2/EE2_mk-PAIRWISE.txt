@@ -1,0 +1,183 @@
+EXTENDED EXTINCTION ANALYSIS
+Cohort: EE2
+Scorer: mk
+
+----(A) FEAR CONDITITIONING----
+SIG     Contrast Time    A   B Paired  Parametric       T    dof alternative  p-unc      BF10  hedges
+  *         Time    -    0   1   True        True  -3.291 10.000   two-sided  0.008     7.147  -1.365
+***         Time    -    0   2   True        True -25.294 10.000   two-sided  0.000 3.017e+07 -10.881
+***         Time    -    0   3   True        True -20.164 10.000   two-sided  0.000 4.103e+06  -8.410
+***         Time    -    0   4   True        True -30.604 10.000   two-sided  0.000 1.635e+08 -13.674
+***         Time    -    1   2   True        True -11.967 10.000   two-sided  0.000  4.67e+04  -3.977
+***         Time    -    1   3   True        True  -8.254 10.000   two-sided  0.000  2340.988  -3.539
+***         Time    -    1   4   True        True -10.596 10.000   two-sided  0.000 1.709e+04  -4.153
+            Time    -    2   3   True        True   0.853 10.000   two-sided  0.414     0.404   0.308
+            Time    -    2   4   True        True  -0.000 10.000   two-sided  1.000     0.298   0.000
+            Time    -    3   4   True        True  -1.254 10.000   two-sided  0.238     0.561  -0.333
+           Group    - SHAM VNS  False        True  -0.721  5.419   two-sided  0.501     0.565  -0.427
+    Time * Group    0 SHAM VNS  False        True   1.000  5.380   two-sided  0.360     0.652   0.592
+    Time * Group    1 SHAM VNS  False        True  -0.621  7.800   two-sided  0.552     0.542  -0.351
+    Time * Group    2 SHAM VNS  False        True  -1.676  4.380   two-sided  0.163     1.067  -1.016
+    Time * Group    3 SHAM VNS  False        True   0.589  8.778   two-sided  0.571     0.536   0.315
+    Time * Group    4 SHAM VNS  False        True  -0.518  5.691   two-sided  0.624     0.523  -0.305
+
+----(B) FEAR RECALL----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc  BF10  hedges
+            Time    -    1   2   True        True  0.601 11.000   two-sided  0.560 0.336   0.093
+           Group    - SHAM VNS  False        True -1.070  4.351   two-sided  0.340 0.671  -0.683
+    Time * Group    1 SHAM VNS  False        True -1.524  4.228   two-sided  0.198 0.936  -0.980
+    Time * Group    2 SHAM VNS  False        True -0.631  4.839   two-sided  0.557 0.535  -0.392
+
+----(C) EXTINCTION DAY 1----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc     BF10  hedges
+***         Time    -    1   2   True        True  6.491 11.000   two-sided  0.000  579.574   1.507
+***         Time    -    1   3   True        True  6.022 11.000   two-sided  0.000  326.932   1.840
+ **         Time    -    1   4   True        True  4.420 11.000   two-sided  0.001   39.133   1.655
+  *         Time    -    1   5   True        True  3.263 11.000   two-sided  0.008    7.436   1.201
+***         Time    -    1   6   True        True  9.149 11.000   two-sided  0.000 9913.327   2.218
+***         Time    -    1   7   True        True  6.274 11.000   two-sided  0.000  446.177   2.125
+ **         Time    -    1   8   True        True  4.026 11.000   two-sided  0.002   22.386   1.329
+  *         Time    -    1   9   True        True  3.182 11.000   two-sided  0.009    6.611   1.139
+ **         Time    -    1  10   True        True  4.143 11.000   two-sided  0.002    26.46   1.427
+            Time    -    2   3   True        True  1.390 11.000   two-sided  0.192    0.626   0.473
+            Time    -    2   4   True        True  1.072 11.000   two-sided  0.307    0.463   0.428
+            Time    -    2   5   True        True  0.029 11.000   two-sided  0.977    0.287   0.012
+  *         Time    -    2   6   True        True  2.563 11.000   two-sided  0.026    2.724   0.781
+            Time    -    2   7   True        True  1.912 11.000   two-sided  0.082     1.14   0.616
+            Time    -    2   8   True        True  0.632 11.000   two-sided  0.540    0.341   0.242
+            Time    -    2   9   True        True  0.067 11.000   two-sided  0.948    0.288   0.027
+            Time    -    2  10   True        True  0.998 11.000   two-sided  0.340    0.436   0.412
+            Time    -    3   4   True        True -0.015 11.000   two-sided  0.989    0.287  -0.005
+            Time    -    3   5   True        True -1.272 11.000   two-sided  0.230    0.556  -0.390
+            Time    -    3   6   True        True  1.110 11.000   two-sided  0.291    0.479   0.271
+            Time    -    3   7   True        True  0.381 11.000   two-sided  0.710    0.306   0.098
+            Time    -    3   8   True        True -0.692 11.000   two-sided  0.503    0.353  -0.143
+            Time    -    3   9   True        True -1.530 11.000   two-sided  0.154    0.726  -0.355
+            Time    -    3  10   True        True  0.117 11.000   two-sided  0.909    0.289   0.042
+            Time    -    4   5   True        True -1.196 11.000   two-sided  0.257    0.517  -0.361
+            Time    -    4   6   True        True  0.886 11.000   two-sided  0.395      0.4   0.256
+            Time    -    4   7   True        True  0.280 11.000   two-sided  0.785    0.297   0.096
+            Time    -    4   8   True        True -0.427 11.000   two-sided  0.678    0.311  -0.131
+            Time    -    4   9   True        True -1.145 11.000   two-sided  0.276    0.494  -0.330
+            Time    -    4  10   True        True  0.137 11.000   two-sided  0.893     0.29   0.044
+            Time    -    5   6   True        True  1.912 11.000   two-sided  0.082     1.14   0.646
+            Time    -    5   7   True        True  1.742 11.000   two-sided  0.109    0.926   0.500
+            Time    -    5   8   True        True  0.627 11.000   two-sided  0.544     0.34   0.205
+            Time    -    5   9   True        True  0.052 11.000   two-sided  0.959    0.288   0.014
+            Time    -    5  10   True        True  1.179 11.000   two-sided  0.263    0.509   0.362
+            Time    -    6   7   True        True -0.629 11.000   two-sided  0.542    0.341  -0.188
+            Time    -    6   8   True        True -1.671 11.000   two-sided  0.123    0.852  -0.376
+  *         Time    -    6   9   True        True -2.294 11.000   two-sided  0.043    1.878  -0.597
+            Time    -    6  10   True        True -0.676 11.000   two-sided  0.513    0.349  -0.174
+            Time    -    7   8   True        True -0.748 11.000   two-sided  0.470    0.365  -0.232
+            Time    -    7   9   True        True -1.682 11.000   two-sided  0.121    0.863  -0.456
+            Time    -    7  10   True        True -0.087 11.000   two-sided  0.933    0.288  -0.034
+            Time    -    8   9   True        True -0.868 11.000   two-sided  0.404    0.395  -0.184
+            Time    -    8  10   True        True  0.477 11.000   two-sided  0.642    0.317   0.159
+            Time    -    9  10   True        True  0.950 11.000   two-sided  0.363     0.42   0.336
+           Group    - SHAM VNS  False        True -0.002  6.193   two-sided  0.999    0.471  -0.001
+    Time * Group    1 SHAM VNS  False        True -1.269  4.764   two-sided  0.263    0.768  -0.792
+    Time * Group    2 SHAM VNS  False        True  0.839  6.304   two-sided  0.432    0.587   0.490
+    Time * Group    3 SHAM VNS  False        True  0.092  9.989   two-sided  0.928    0.472   0.047
+    Time * Group    4 SHAM VNS  False        True  0.827  9.002   two-sided  0.430    0.584   0.443
+    Time * Group    5 SHAM VNS  False        True  0.092  7.715   two-sided  0.929    0.472   0.052
+    Time * Group    6 SHAM VNS  False        True -0.138  5.613   two-sided  0.895    0.474  -0.083
+    Time * Group    7 SHAM VNS  False        True  0.897  5.727   two-sided  0.406    0.606   0.536
+    Time * Group    8 SHAM VNS  False        True -0.154  9.501   two-sided  0.881    0.475  -0.081
+    Time * Group    9 SHAM VNS  False        True -0.063  8.425   two-sided  0.951    0.472  -0.034
+    Time * Group   10 SHAM VNS  False        True -1.061  9.739   two-sided  0.314    0.667  -0.552
+
+----(D) EXTINCTION DAY 2----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc   BF10  hedges
+            Time    -    1   2   True        True  0.708 11.000   two-sided  0.494  0.356   0.234
+            Time    -    1   3   True        True -0.561 11.000   two-sided  0.586  0.329  -0.243
+            Time    -    1   4   True        True -0.122 11.000   two-sided  0.905  0.289  -0.053
+            Time    -    1   5   True        True -0.846 11.000   two-sided  0.415  0.389  -0.376
+            Time    -    1   6   True        True -2.132 11.000   two-sided  0.056  1.513  -0.797
+            Time    -    1   7   True        True -0.194 11.000   two-sided  0.850  0.292  -0.069
+  *         Time    -    1   8   True        True -2.900 11.000   two-sided  0.014  4.396  -1.261
+  *         Time    -    1   9   True        True -2.539 11.000   two-sided  0.028  2.633  -0.827
+            Time    -    1  10   True        True -2.111 11.000   two-sided  0.058  1.472  -0.703
+            Time    -    2   3   True        True -1.330 11.000   two-sided  0.210  0.589  -0.466
+            Time    -    2   4   True        True -0.582 11.000   two-sided  0.573  0.332  -0.243
+            Time    -    2   5   True        True -1.941 11.000   two-sided  0.078  1.183  -0.620
+ **         Time    -    2   6   True        True -3.529 11.000   two-sided  0.005 10.936  -0.971
+            Time    -    2   7   True        True -0.578 11.000   two-sided  0.575  0.332  -0.240
+  *         Time    -    2   8   True        True -3.080 11.000   two-sided  0.010  5.698  -1.439
+  *         Time    -    2   9   True        True -2.939 11.000   two-sided  0.013  4.649  -0.997
+  *         Time    -    2  10   True        True -2.682 11.000   two-sided  0.021  3.223  -0.880
+            Time    -    3   4   True        True  0.454 11.000   two-sided  0.659  0.314   0.145
+            Time    -    3   5   True        True -0.391 11.000   two-sided  0.703  0.307  -0.101
+            Time    -    3   6   True        True -1.712 11.000   two-sided  0.115  0.894  -0.593
+            Time    -    3   7   True        True  0.276 11.000   two-sided  0.788  0.297   0.110
+  *         Time    -    3   8   True        True -2.492 11.000   two-sided  0.030  2.467  -1.030
+            Time    -    3   9   True        True -1.796 11.000   two-sided  0.100  0.989  -0.626
+            Time    -    3  10   True        True -1.278 11.000   two-sided  0.227  0.559  -0.497
+            Time    -    4   5   True        True -0.608 11.000   two-sided  0.555  0.337  -0.237
+            Time    -    4   6   True        True -1.584 11.000   two-sided  0.142  0.771  -0.645
+            Time    -    4   7   True        True -0.046 11.000   two-sided  0.964  0.288  -0.019
+  *         Time    -    4   8   True        True -2.581 11.000   two-sided  0.026  2.795  -1.018
+            Time    -    4   9   True        True -1.522 11.000   two-sided  0.156   0.72  -0.675
+            Time    -    4  10   True        True -1.132 11.000   two-sided  0.282  0.488  -0.560
+            Time    -    5   6   True        True -1.990 11.000   two-sided  0.072  1.259  -0.556
+            Time    -    5   7   True        True  0.429 11.000   two-sided  0.676  0.311   0.189
+  *         Time    -    5   8   True        True -2.356 11.000   two-sided  0.038  2.044  -1.032
+            Time    -    5   9   True        True -1.707 11.000   two-sided  0.116  0.888  -0.592
+            Time    -    5  10   True        True -1.228 11.000   two-sided  0.245  0.533  -0.453
+            Time    -    6   7   True        True  1.480 11.000   two-sided  0.167  0.688   0.578
+            Time    -    6   8   True        True -0.789 11.000   two-sided  0.447  0.374  -0.325
+            Time    -    6   9   True        True -0.127 11.000   two-sided  0.902  0.289  -0.039
+            Time    -    6  10   True        True  0.207 11.000   two-sided  0.840  0.293   0.090
+  *         Time    -    7   8   True        True -2.751 11.000   two-sided  0.019  3.554  -0.913
+            Time    -    7   9   True        True -1.826 11.000   two-sided  0.095  1.025  -0.608
+            Time    -    7  10   True        True -1.069 11.000   two-sided  0.308  0.462  -0.499
+            Time    -    8   9   True        True  0.801 11.000   two-sided  0.440  0.377   0.279
+            Time    -    8  10   True        True  0.943 11.000   two-sided  0.366  0.418   0.424
+            Time    -    9  10   True        True  0.365 11.000   two-sided  0.722  0.304   0.128
+           Group    - SHAM VNS  False        True -0.042  9.966   two-sided  0.967  0.471  -0.022
+    Time * Group    1 SHAM VNS  False        True -1.701  9.711   two-sided  0.121   1.09  -0.838
+    Time * Group    2 SHAM VNS  False        True  0.533  7.885   two-sided  0.609  0.516   0.296
+    Time * Group    3 SHAM VNS  False        True  0.513  9.029   two-sided  0.620  0.512   0.275
+    Time * Group    4 SHAM VNS  False        True  1.875  6.122   two-sided  0.109  1.279   1.103
+    Time * Group    5 SHAM VNS  False        True  0.061  9.982   two-sided  0.952  0.472   0.031
+    Time * Group    6 SHAM VNS  False        True  0.272  8.452   two-sided  0.792  0.482   0.148
+    Time * Group    7 SHAM VNS  False        True  0.735  9.411   two-sided  0.480  0.559   0.388
+    Time * Group    8 SHAM VNS  False        True  0.535  7.160   two-sided  0.609  0.516   0.304
+    Time * Group    9 SHAM VNS  False        True -1.394  8.445   two-sided  0.199  0.843  -0.661
+  * Time * Group   10 SHAM VNS  False        True -2.965  9.400   two-sided  0.015  4.097  -1.444
+
+----(E) RETENTION----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc  BF10  hedges
+            Time    -    1   2   True        True -1.015 11.000   two-sided  0.332 0.442  -0.406
+           Group    - SHAM VNS  False        True  0.095  6.316   two-sided  0.927 0.472   0.055
+    Time * Group    1 SHAM VNS  False        True -1.041  8.968   two-sided  0.325 0.659  -0.501
+    Time * Group    2 SHAM VNS  False        True  0.692  5.519   two-sided  0.517 0.548   0.417
+
+----(F) SHORT-TERM SR----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc  BF10  hedges
+            Time    -    1   2   True        True  0.920 11.000   two-sided  0.377 0.411   0.301
+           Group    - SHAM VNS  False        True  0.028  6.175   two-sided  0.978 0.471   0.017
+    Time * Group    1 SHAM VNS  False        True  0.468  8.175   two-sided  0.652 0.505   0.258
+    Time * Group    2 SHAM VNS  False        True -0.476  7.357   two-sided  0.648 0.506  -0.268
+
+----(G) LONG-TERM SR----
+SIG     Contrast Time    A   B Paired  Parametric     T    dof alternative  p-unc  BF10  hedges
+            Time    -    1   2   True        True 1.308 11.000   two-sided  0.218 0.575   0.374
+           Group    - SHAM VNS  False        True 0.679  6.206   two-sided  0.522 0.545   0.398
+    Time * Group    1 SHAM VNS  False        True 1.131  7.767   two-sided  0.292 0.698   0.631
+    Time * Group    2 SHAM VNS  False        True 0.227  5.376   two-sided  0.829 0.479   0.138
+
+----(H) RENEWAL----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc  BF10  hedges
+  *         Time    -    1   2   True        True -2.588 11.000   two-sided  0.025 2.822  -0.361
+           Group    - SHAM VNS  False        True  0.644  4.149   two-sided  0.554 0.537   0.416
+    Time * Group    1 SHAM VNS  False        True  0.694  4.140   two-sided  0.525 0.549   0.449
+    Time * Group    2 SHAM VNS  False        True  0.569  4.566   two-sided  0.596 0.522   0.359
+
+----(I) RST. TEST----
+SIG     Contrast Time    A   B Paired  Parametric      T    dof alternative  p-unc  BF10  hedges
+            Time    -    1   2   True        True  1.639 11.000   two-sided  0.129 0.821   0.207
+           Group    - SHAM VNS  False        True -0.783  6.023   two-sided  0.463 0.571  -0.462
+    Time * Group    1 SHAM VNS  False        True -0.789  6.776   two-sided  0.457 0.573  -0.454
+    Time * Group    2 SHAM VNS  False        True -0.741  5.398   two-sided  0.490  0.56  -0.449
+

@@ -18,11 +18,11 @@ from ee_group_info import *
 # Project
 data_folder = "./data"
 project = "Extended Extinction"
-# cohorts = ["EE1","EE2"] # combined EE1 + EE2 data
-# rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
-cohorts = ["EET"]  
-rows_to_plot = ["EET"]
-scorer = "hp"
+cohorts = ["EE1","EE2","EE1_2"] # combined EE1 + EE2 data
+rows_to_plot = ["ROW1","ROW2"]  # 2 rows of subplots. 
+# cohorts = ["EET"]  
+# rows_to_plot = ["EET"]
+scorer = "mk"
 
 
 #------ FIGURE INFO ------#
@@ -42,22 +42,22 @@ set_font_sizes(title_size, font_size)
 
 fig_subfolder = make_fig_subfolder(fig_folder)
 
-log_filepath = create_log_file(
+for cohort in cohorts:
+    log_filepath = create_log_file(
         fig_subfolder,
-        cohorts,
+        cohort,
         scorer,
         project=project
     )
 
-posthoc_filepath = create_log_file(
-        fig_subfolder,
-        cohorts,
-        scorer,
-        project=project,
-        filename='PAIRWISE.txt'
-    )
-
-for cohort in cohorts:
+    posthoc_filepath = create_log_file(
+            fig_subfolder,
+            cohort,
+            scorer,
+            project=project,
+            filename='PAIRWISE.txt'
+        )
+    
     for fig_index, fig_filename in enumerate(rows_to_plot):
         
         to_plot, rel_widths, rows, cols, size, subplot_spacing, session_names = figure_details(fig_filename)

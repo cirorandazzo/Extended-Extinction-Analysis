@@ -12,7 +12,8 @@ def run_stats(
     dv='Freezing',
     within='Time',
     subject='Subject ID',
-    between='Group'
+    between='Group',
+    cohort=None
 ):
     """
     TODO: documentation
@@ -109,19 +110,13 @@ def _pivot_df(
 
 def create_log_file(
     path,
-    cohorts,
+    cohort,
     scorer,
     filename="LOG.txt",
     sessions_logged=None,
     project="Extended Extinction",
 ):
-    if cohorts.__class__ is list:
-        if len(cohorts)==1:
-            cohorts = cohorts[0]
-        else:
-            cohorts='_'.join(cohorts)
-
-    filename = f"{cohorts}_{scorer}-{filename}"
+    filename = f"{cohort}_{scorer}-{filename}"
     
     if not filename.endswith('.txt'):
         filename = f'{filename}.txt'
@@ -131,7 +126,7 @@ def create_log_file(
     if not os.path.exists(filename):
         with open(filename,'a') as f:
             f.write(project.upper() + " ANALYSIS" + "\n")
-            f.write(f"Cohorts: {cohorts}\n")
+            f.write(f"Cohort: {cohort}\n")
             f.write(f"Scorer: {scorer}\n")
             if sessions_logged is not None:
                 f.write(f"Sessions: {sessions_logged}\n" )
